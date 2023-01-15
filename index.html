@@ -1,0 +1,38 @@
+<html lang="en">
+	<head>
+		<link rel="stylesheet" href="stylesheets/stylesheet.css">
+		<title>Project Week: David Kupert</title>
+	</head>
+    <body>
+		<div id="gameContainer">
+			<div class="gameElement" id="background"></div>
+			<canvas class="gameElement" id="canvas" width="640" height="360"></canvas>
+		</div>
+		<!--TODO switch to Modules -->
+		<!-- First: Import the Classes -->
+		<!-- gameManager -->
+		<script src="gameManager.js"></script>
+
+		<!-- drawLayer -->
+		<script src="canvas.js"></script>
+
+		<!-- helpers -->
+		<script src="helpers/mouseHelper.js"></script>
+		<script src="helpers/gravityHelper.js"></script>
+
+		<!-- gameObjects -->
+		<script src="gameObjects/gameObject.js"></script>
+		<script src="gameObjects/imageObject.js"></script>
+
+		<script src="gameObjects/playerFigure.js"></script>
+		<script src="gameObjects/obstacle.js"></script>
+		<script src="gameObjects/wall.js"></script>
+		<script src="gameObjects/enemy.js"></script>
+		<script src="gameObjects/yummyDot.js"></script>
+
+
+		<!-- Second: Start the Setup for the game -->
+		<script src="setup/stageSetup.js"></script>
+		<script src="setup/inputHandling.js"></script>
+	</body>
+</html>

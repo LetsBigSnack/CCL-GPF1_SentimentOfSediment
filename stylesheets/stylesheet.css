@@ -1,0 +1,17 @@
+.gameElement {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: min(90vw,160vh);
+    aspect-ratio: 16/9;
+}
+
+#background {
+    background: url("../images/background.jpg");
+    background-size: cover;
+}
+
+#gameContainer {
+    position: relative; 
+    height: 500px;
+}
