@@ -9,7 +9,6 @@ class Enemy extends ImageObject {
     constructor(name, x, y, width, height, src) {
         super(name, x, y, width, height, src);
         console.log("PlayerFigure has been created");
-        this.useGravity = true;
         this.mass = .6;
     }
 
