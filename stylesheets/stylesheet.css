@@ -2,12 +2,15 @@
     position: absolute;
     top: 0;
     left: 0;
-    width: min(90vw,160vh);
-    aspect-ratio: 16/9;
+    width: min(75vw,145vh);
+    aspect-ratio: 768/512;
 }
 
 #background {
-    background: url("../images/background.jpg");
+    background-color: black;
+    /*
+     background: url("../images/background.jpg");
+     */
     background-size: cover;
 }
 

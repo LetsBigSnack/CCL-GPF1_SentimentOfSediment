@@ -14,6 +14,7 @@ class GameManager {
 		mouseEvents :5,
 		draw : 6
 	};
+	stopCurrentLoop = false;
 
 	/**
 	 * The class constructor for the class "GameManager"
@@ -27,6 +28,15 @@ class GameManager {
 		window.gameManager = this;
 		//TODO make MouseHelper static
 		window.mouseHelper = new MouseHelper();
+
+		this.currentRoom = new Room();
+		let test = new Room();
+		test.addEntity(enemy);
+		this.currentRoom.addConnection(Room.connections.North, test);
+		this.currentRoom.setUpWalls();
+
+		this.rooms = [];
+
 		console.log("gameManager created");
 	}
 
@@ -50,26 +60,41 @@ class GameManager {
 					switch (gameLoopState) {
 
 						case GameManager.gameStates.storeAndUpdate:
+							if(gameManager.stopCurrentLoop){
+								break;
+							}
 							gameObject.storePosition();
 							gameObject.update();
 							break;
 
 						case GameManager.gameStates.collisionCheck:
+							if(gameManager.stopCurrentLoop){
+								break;
+							}
 							gameObject.currentGravityCollisionObject = null;
 							gameManager.checkObjectsForCollisions(gameObject);
 							break;
 
 						case GameManager.gameStates.applyGravity:
+							if(gameManager.stopCurrentLoop){
+								break;
+							}
 							if(gameObject.useGravity){
 								GravityHelper.applyGravityForces(gameObject, false);
 							}
 							break;
 
 						case GameManager.gameStates.gravityCollisionCheck:
+							if(gameManager.stopCurrentLoop){
+								break;
+							}
 							gameManager.checkObjectsForGravityCollisions(gameObject);
 							break;
 
 						case GameManager.gameStates.gravityRevert:
+							if(gameManager.stopCurrentLoop){
+								break;
+							}
 							if (gameObject.useGravity) {
 								if (gameObject.currentGravityCollisionObject != null) {
 									GravityHelper.applyGravityForces(gameObject, true);
@@ -81,9 +106,15 @@ class GameManager {
 							break;
 
 						case GameManager.gameStates.mouseEvents:
+							if(gameManager.stopCurrentLoop){
+								break;
+							}
 							mouseHelper.checkObjectMouseEvent(gameObject);
 							break;
 						case GameManager.gameStates.draw:
+							if(gameManager.stopCurrentLoop){
+								break;
+							}
 							//gameObject.rotate();
 							gameObject.draw();
 							//gameObject.restoreCanvas();
@@ -91,6 +122,10 @@ class GameManager {
 					}
 				}
 			});
+
+			if(gameLoopState === GameManager.gameStates.draw){
+				gameManager.stopCurrentLoop = false;
+			}
 		}
 		mouseHelper.recentMouseEvent = 0;	
 		requestAnimationFrame(gameManager.gameLoop);
@@ -103,6 +138,9 @@ class GameManager {
 	 */
 	checkObjectsForCollisions(object1) {
 		for (let i = object1.gameObjectIndex + 1; i < gameManager.gameObjects.length; i++) {
+			if(gameManager.stopCurrentLoop){
+				break;
+			}
 			let object2 = gameManager.gameObjects[i];
 			if(object2.isActive) {
 				//normal collision after update
@@ -122,6 +160,9 @@ class GameManager {
 	 */
 	checkObjectsForGravityCollisions(object1) {	
 		for (let i = object1.gameObjectIndex + 1; i < gameManager.gameObjects.length; i++) {
+			if(gameManager.stopCurrentLoop){
+				break;
+			}
 			let object2 = gameManager.gameObjects[i];
 			if(object2.isActive && object2.isRigid && object1.useGravity) {
 				GravityHelper.checkForGravityCollision(object1, object2);
@@ -159,6 +200,10 @@ class GameManager {
 		object.gameObjectIndex = this.gameObjects.length - 1;
 	}
 
+	clearGameObjects(){
+		gameManager.gameObjects = [];
+	}
+
 	/**
 	 * Sets a Canvas to the gameManger
 	 * @param{Canvas} canvas The Canvas, which will be set for the gameManager
@@ -167,5 +212,10 @@ class GameManager {
 		this.canvas = canvas;
 	}
 
+	setUpRoom(){
+		gameManager.clearGameObjects();
+		gameManager.currentRoom.addEntity(skeleton);
+		gameManager.currentRoom.addEntityToObject(this);
+	}
 }
 	

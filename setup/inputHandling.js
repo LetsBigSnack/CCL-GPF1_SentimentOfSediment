@@ -1,39 +1,24 @@
+let pressedKeys = {}
+
 function keyDown(eventInformation) {
+
+	pressedKeys[eventInformation.key] = true;
 
 	switch (eventInformation.key) {
 		case "w":
-			if (skeleton.isFalling || skeleton.antiGravityForce > 0)
-				return;
-			
-			skeleton.startJump = true;
+			skeleton.moveBy.top = -skeleton.moveVelocity;
+			skeleton.setCurrentAnimationByName("walk_up");
 			break;
 		case "a":
-			if (skeleton.moveBy.left != 0 || skeleton.moveBy.top != 0) {
-				return;
-			}
-			skeleton.moveBy.top = 0;
 			skeleton.moveBy.left = -skeleton.moveVelocity;
-			//skeleton.setCurrentAnimation(9, 17);
 			skeleton.setCurrentAnimationByName("walk_left");
-			//move left
 			break;
 		case "d":
-			if (skeleton.moveBy.left != 0 || skeleton.moveBy.top != 0) {
-				return;
-			}
-			skeleton.moveBy.top = 0 ;
 			skeleton.moveBy.left = skeleton.moveVelocity;
-			//skeleton.setCurrentAnimation(27, 35);
 			skeleton.setCurrentAnimationByName("walk_right");
-			//move right
 			break;
 		case "s":
-			if (skeleton.moveBy.left != 0 || skeleton.moveBy.top != 0) {
-				return;
-			}
 			skeleton.moveBy.top = skeleton.moveVelocity;
-			skeleton.moveBy.left = 0;
-			//skeleton.setCurrentAnimation(18, 26);
 			skeleton.setCurrentAnimationByName("walk_down");
 			//move down
 			break;
@@ -42,35 +27,53 @@ function keyDown(eventInformation) {
 window.addEventListener("keydown", keyDown);
 
 function keyUp(eventInformation) {
-	switch (eventInformation.key) {
-		case "w":
-		    /*skeleton.moveBy.top = 0;
-			skeleton.moveBy.left = 0;
-			//skeleton.setCurrentAnimation(0, 0);
-			skeleton.setCurrentAnimationByName("idle_up");*/
-			//move up
-			break;
-		case "a":
-			skeleton.moveBy.top = 0;
-			skeleton.moveBy.left = 0;
-			//skeleton.setCurrentAnimation(9, 9);
-			skeleton.setCurrentAnimationByName("idle_left");
-			//move left
-			break;
-		case "d":
-			skeleton.moveBy.top = 0 ;
-			skeleton.moveBy.left = 0;
-			//skeleton.setCurrentAnimation(27, 35);
-			skeleton.setCurrentAnimationByName("idle_right");
-			//move right
-			break;
-		case "s":
-			/*skeleton.moveBy.top = 0;
-			skeleton.moveBy.left = 0;
-			//skeleton.setCurrentAnimation(18, 26);
-			skeleton.setCurrentAnimationByName("idle_down");
-			//move down*/
-			break;
+
+	pressedKeys[eventInformation.key] = false;
+
+	skeleton.moveBy.top = 0;
+	skeleton.moveBy.left = 0;
+
+	if(pressedKeys["w"]){
+		skeleton.moveBy.top = -skeleton.moveVelocity;
+		skeleton.setCurrentAnimationByName("walk_up");
+	}
+	if(pressedKeys["a"]){
+		skeleton.moveBy.left = -skeleton.moveVelocity;
+		skeleton.setCurrentAnimationByName("walk_left");
+	}
+	if(pressedKeys["s"]){
+		skeleton.moveBy.top = skeleton.moveVelocity;
+		skeleton.setCurrentAnimationByName("walk_down");
+	}
+	if(pressedKeys["d"]){
+		skeleton.moveBy.left = skeleton.moveVelocity;
+		skeleton.setCurrentAnimationByName("walk_right");
+	}
+
+	let isKeyPressed = false;
+
+	for (const [key, value] of Object.entries(pressedKeys)) {
+		if (value){
+			isKeyPressed = true;
+		}
+	}
+
+	if(!isKeyPressed){
+		switch (eventInformation.key) {
+			case "w":
+                skeleton.setCurrentAnimationByName("idle_up");
+				break;
+			case "a":
+				skeleton.setCurrentAnimationByName("idle_left");
+				break;
+			case "d":
+				skeleton.setCurrentAnimationByName("idle_right");
+				break;
+			case "s":
+                skeleton.setCurrentAnimationByName("idle_down");
+				break;
+	}
+
 	}
 }
 window.addEventListener("keyup", keyUp);

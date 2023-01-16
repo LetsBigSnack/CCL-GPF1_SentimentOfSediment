@@ -1,5 +1,7 @@
 
 class PlayerFigure extends ImageObject {
+
+
     moveBy = {
 	    "left": 0,
 	    "top": 0
@@ -11,7 +13,7 @@ class PlayerFigure extends ImageObject {
     constructor(name, x, y, width, height, src) {
         super(name, x, y, width, height, src);
         console.log("PlayerFigure has been created");
-        this.useGravity = true;
+
         this.mass = .6;
     }
 
@@ -19,11 +21,6 @@ class PlayerFigure extends ImageObject {
         this.position.x += this.moveBy.left;
         this.position.y += this.moveBy.top;
         this.checkWorldPostion();
-
-        if (this.startJump) {
-            this.addAntiGravityForce(300);
-            this.startJump = false;
-        }
     }
     
     checkWorldPostion() {
@@ -44,16 +41,5 @@ class PlayerFigure extends ImageObject {
     onCollision(otherObject) {
 
     }
-    /*draw() {
-        gameManager.canvas.drawLayer.beginPath();
-        gameManager.canvas.drawLayer.fillStyle = "yellow";
-        gameManager.canvas.drawLayer.rect(this.position.x, this.position.y, this.dimensions.width, this.singlePartHeight);
-        gameManager.canvas.drawLayer.rect(this.position.x, this.position.y + this.singlePartHeight + this.offset , this.dimensions.width, this.singlePartHeight);
-        gameManager.canvas.drawLayer.fill();
-        gameManager.canvas.drawLayer.closePath();   
-    }*/
-
-  
-      
 
 }

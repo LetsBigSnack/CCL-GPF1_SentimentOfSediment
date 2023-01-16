@@ -64,7 +64,7 @@ class GameObject {
             width : width,
             height : height
         };
-        gameManager.addGameObject(this);
+        //gameManager.addGameObject(this);
         console.log("new GameObject has been created");
     }
 
