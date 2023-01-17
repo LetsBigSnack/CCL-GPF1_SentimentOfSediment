@@ -21,11 +21,11 @@ skeleton.addAnimationInformation("idle_up", 38, 38);
 skeleton.addAnimationInformation("idle_left", 50, 50);
 skeleton.addAnimationInformation("idle_right", 20, 20);
 skeleton.addAnimationInformation("idle_down", 7, 7);
+let miniMap = new MiniMap("mini",canvas.canvasBoundaries.right-130,5,125,125);
 
-
+gameManager.currentRoom.addEntity(miniMap);
 
 gameManager.setUpRoom();
-
 requestAnimationFrame(gameManager.gameLoop);
 
 

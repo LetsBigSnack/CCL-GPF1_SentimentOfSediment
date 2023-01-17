@@ -44,6 +44,7 @@ class Room{
         this.numberConnections = 0;
         this.visitedByGenerator = false;
         this.alreadyFilled = false;
+        this.visited = false;
     }
 
     setUpWalls(){

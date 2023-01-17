@@ -19,7 +19,7 @@ class Door extends GameObject {
             if(gameManager.currentRoom.connectedRooms[this.name]){
                 gameManager.currentRoom = gameManager.currentRoom.connectedRooms[this.name];
                 gameManager.clearGameObjects();
-
+                gameManager.currentRoom.visited = true;
                 switch (this.name){
                     case "n":
                         skeleton.position.x = 352;
@@ -43,6 +43,7 @@ class Door extends GameObject {
                 if(!gameManager.currentRoom.alreadyFilled){
                     gameManager.currentRoom.setUpWalls();
                     gameManager.currentRoom.addEntity(skeleton);
+                    gameManager.currentRoom.addEntity(miniMap);
                 }
                 gameManager.currentRoom.addEntityToObject(gameManager);
                 gameManager.stopCurrentLoop = true;

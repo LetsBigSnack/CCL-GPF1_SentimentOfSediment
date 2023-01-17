@@ -38,7 +38,9 @@ class GameManager {
 		 */
 		this.rooms = LevelGenerator.generateLevel();
 		this.currentRoom = this.rooms.filter(room => room.x_pos === 0 &&  room.y_pos === 0)[0];
+
 		this.currentRoom.setUpWalls();
+		this.currentRoom.visited = true;
 		console.log("gameManager created");
 	}
 
