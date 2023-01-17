@@ -29,14 +29,16 @@ class GameManager {
 		//TODO make MouseHelper static
 		window.mouseHelper = new MouseHelper();
 
-		this.currentRoom = new Room();
-		let test = new Room();
-		test.addEntity(enemy);
-		this.currentRoom.addConnection(Room.connections.North, test);
+		/**
+		 *        this.currentRoom = new Room(0,0);
+		 *        let test = new Room(0,1);
+		 *        test.addEntity(enemy);
+		 *        this.currentRoom.addConnection(Room.connections.North, test);
+		 *        this.currentRoom.setUpWalls();
+		 */
+		this.rooms = LevelGenerator.generateLevel();
+		this.currentRoom = this.rooms.filter(room => room.x_pos === 0 &&  room.y_pos === 0)[0];
 		this.currentRoom.setUpWalls();
-
-		this.rooms = [];
-
 		console.log("gameManager created");
 	}
 

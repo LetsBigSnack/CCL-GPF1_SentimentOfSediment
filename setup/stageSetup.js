@@ -11,16 +11,16 @@ let gameManager = new GameManager();
 
 let canvas = new Canvas("canvas");
 
-let skeleton = new PlayerFigure("player", 210, 308, 64, 64, "images/BODY_skeleton.png");
-skeleton.addAnimationInformation("walk_up", 0, 8);
-skeleton.addAnimationInformation("walk_left", 9, 17);
-skeleton.addAnimationInformation("walk_right", 27, 35);
-skeleton.addAnimationInformation("walk_down", 18, 26);
+let skeleton = new PlayerFigure("player", 210, 308, 64, 64, "images/character_spritesheett.png");
+skeleton.addAnimationInformation("walk_up", 39, 42);
+skeleton.addAnimationInformation("walk_left", 51, 57)
+skeleton.addAnimationInformation("walk_right", 21, 27);
+skeleton.addAnimationInformation("walk_down", 7, 10);
 
-skeleton.addAnimationInformation("idle_up", 0, 0);
-skeleton.addAnimationInformation("idle_left", 9, 9);
-skeleton.addAnimationInformation("idle_right", 27, 27);
-skeleton.addAnimationInformation("idle_down", 18, 18);
+skeleton.addAnimationInformation("idle_up", 38, 38);
+skeleton.addAnimationInformation("idle_left", 50, 50);
+skeleton.addAnimationInformation("idle_right", 20, 20);
+skeleton.addAnimationInformation("idle_down", 7, 7);
 
 
 

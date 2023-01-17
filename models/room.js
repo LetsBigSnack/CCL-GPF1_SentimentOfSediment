@@ -14,8 +14,25 @@ class Room{
         "w" : "e"
     }
 
-    constructor() {
+    static generatorDirections = {
+        "n" : [0,1],
+        "e" : [1,0],
+        "s" : [0,-1],
+        "w" : [-1,0]
+    }
+
+
+
+
+
+    x_pos;
+    y_pos;
+
+    constructor(x_pos, y_pos) {
         //TODO add visited attribute
+
+        this.x_pos = x_pos;
+        this.y_pos = y_pos;
 
         this.tileDimensions = {
             x: 64,
@@ -24,6 +41,8 @@ class Room{
         this.roomTiles = Array.from(Array(8), () => new Array(12));
         this.connectedRooms = [];
         this.containedEntites = [];
+        this.numberConnections = 0;
+        this.visitedByGenerator = false;
         this.alreadyFilled = false;
     }
 
@@ -94,6 +113,7 @@ class Room{
      * @param room
      */
     addConnection(directions, room, call = true){
+        this.numberConnections++;
         this.connectedRooms[directions] = room;
         if(call){
             room.addConnection(Room.oppositeDirections[directions],this,false);
