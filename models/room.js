@@ -21,15 +21,22 @@ class Room{
         "w" : [-1,0]
     }
 
-
+    static roomTypes = {
+        Normal : 0,
+        Item : 1,
+        Boss: 2,
+        Shop : 3
+    };
 
 
 
     x_pos;
     y_pos;
 
-    constructor(x_pos, y_pos) {
+    constructor(x_pos, y_pos, type = Room.roomTypes.Normal) {
         //TODO add visited attribute
+
+        this.type = type;
 
         this.x_pos = x_pos;
         this.y_pos = y_pos;
