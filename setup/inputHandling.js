@@ -22,6 +22,31 @@ function keyDown(eventInformation) {
 			skeleton.setCurrentAnimationByName("walk_down");
 			//move down
 			break;
+		case "ArrowLeft":
+			// Left pressed
+			console.log("Punch Left");
+			skeleton.punch = "left";
+			break;
+		case "ArrowRight":
+			// Right pressed
+			console.log("Punch Right");
+			skeleton.punch = "right";
+			break;
+		case "ArrowUp":
+			// Up pressed
+			console.log("Punch Up");
+			skeleton.punch = "up";
+			break;
+		case "ArrowDown":
+			// Down pressed
+			console.log("Punch Down");
+			skeleton.punch = "down";
+			break;
+		case "e":
+			// Down pressed
+			console.log("Punch Down");
+			skeleton.bomb = true;
+			break;
 	}
 }
 window.addEventListener("keydown", keyDown);

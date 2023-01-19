@@ -1,39 +1,56 @@
-class Enemy extends ImageObject {
-    changeMoveDirectionPossibility = 1;
-    changeMoveDirectionStep = 0.00001;
+class Enemy extends GameObject {
+
     moveBy = {
         "x": 1,
         "y": 0
     };
 
-    constructor(name, x, y, width, height, src) {
-        super(name, x, y, width, height, src);
-        console.log("PlayerFigure has been created");
-        this.mass = .6;
+    speed = 2;
+
+    constructor(name, x, y, width, height) {
+        super(name, x, y, width, height);
+        console.log("Enemy has been created");
     }
 
     update() {
-      let result = Math.random();
+        this.searchPlayer();
+        this.position.x += this.moveBy.x * this.speed;
+        this.position.y += this.moveBy.y * this.speed;
+    }
 
-      if (result <= this.changeMoveDirectionPossibility) {
-        //change direction
-        this.moveBy.x *= -1;
-        this.moveBy.y *= -1;
+    searchPlayer(){
+        let rng = Math.random();
 
-        if (this.moveBy.x == 1) {
-            this.setCurrentAnimationByName("walk_right");
+        if(rng >= 0.5){
+            if(this.position.x < skeleton.prevPosition.x){
+                this.moveBy.x = 1;
+            }else if(this.position.x > skeleton.prevPosition.x){
+                this.moveBy.x = -1;
+            }else{
+                this.moveBy.x = 0;
+            }
+
+            if(this.position.y < skeleton.prevPosition.y){
+                this.moveBy.y = 1;
+            }else if(this.position.y > skeleton.prevPosition.y){
+                this.moveBy.y = -1;
+            }else{
+                this.moveBy.y = 0;
+            }
+        }else{
+            this.moveBy.y *= Math.floor(Math.random() * (1 - -1 + 1) + -1);
+            this.moveBy.x *= Math.floor(Math.random() * (1 - -1 + 1) + -1);
         }
-        else {
-            this.setCurrentAnimationByName("walk_left");
-        }
+    }
 
-        this.changeMoveDirectionPossibility = 0.00001;
-      }
-      else {
-        this.changeMoveDirectionPossibility += this.changeMoveDirectionStep;
-      }
-      this.position.x += this.moveBy.x;
-      this.position.y += this.moveBy.y;
+    draw() {
+        gameManager.canvas.drawLayer.beginPath();
+        gameManager.canvas.drawLayer.fillStyle = "blue";
+        gameManager.canvas.drawLayer.strokeStyle = "#000000";
+        gameManager.canvas.drawLayer.rect(this.position.x, this.position.y, this.dimensions.width, this.dimensions.height);
+        gameManager.canvas.drawLayer.fill();
+        gameManager.canvas.drawLayer.stroke();
+        gameManager.canvas.drawLayer.closePath();
     }
 
     onCollision(otherObject) {

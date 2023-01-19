@@ -122,6 +122,22 @@ class GameObject {
     draw() {
     }
 
+    debugDraw(){
+        //
+        gameManager.canvas.drawLayer.beginPath();
+        gameManager.canvas.drawLayer.strokeStyle = "red";
+        gameManager.canvas.drawLayer.rect(this.position.x, this.position.y, this.dimensions.width, this.dimensions.height);
+        gameManager.canvas.drawLayer.stroke();
+        gameManager.canvas.drawLayer.closePath();
+
+        //Offset
+        gameManager.canvas.drawLayer.beginPath();
+        gameManager.canvas.drawLayer.strokeStyle = "blue";
+        gameManager.canvas.drawLayer.rect(  this.boundaryOffsets.left+ this.position.x, this.position.y + this.boundaryOffsets.top, this.dimensions.width+this.boundaryOffsets.right-this.boundaryOffsets.left, this.dimensions.height+this.boundaryOffsets.bottom-this.boundaryOffsets.top);
+        gameManager.canvas.drawLayer.stroke();
+        gameManager.canvas.drawLayer.closePath();
+    }
+
     /**
      * This function is called whenever another GameObject collides with this one
      * and executes what happens afterward

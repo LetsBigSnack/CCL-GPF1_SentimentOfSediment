@@ -20,7 +20,9 @@ class GameManager {
 	 * The class constructor for the class "GameManager"
 	 */
 	constructor() {
-
+		this.framecount = 0;
+		this.fps = 60;
+		this.fps_time = 1000 / this.fps;
 		this.gameObjects = [];
 		this.canvas = null;
 		this.currentDeltaTime = 0;
@@ -29,20 +31,16 @@ class GameManager {
 		//TODO make MouseHelper static
 		window.mouseHelper = new MouseHelper();
 
-		/**
-		 *        this.currentRoom = new Room(0,0);
-		 *        let test = new Room(0,1);
-		 *        test.addEntity(enemy);
-		 *        this.currentRoom.addConnection(Room.connections.North, test);
-		 *        this.currentRoom.setUpWalls();
-		 */
 		this.rooms = LevelGenerator.generateLevel();
 		this.currentRoom = this.rooms.filter(room => room.x_pos === 0 &&  room.y_pos === 0)[0];
-
+		this.currentRoom.addEntity(new Enemy("nemeny", 300,300,64,64));
 		this.currentRoom.setUpWalls();
 		this.currentRoom.visited = true;
 		console.log("gameManager created");
+		this.startTime = undefined;
 	}
+
+
 
 	/**
 	 * This function executes the GameLoop for each object in the gameManger
@@ -50,88 +48,117 @@ class GameManager {
 	 */
 	gameLoop() {
 
+		/**
+		 * The first thing I noticed was that performance.now() is 4 times slower than Date.now() (400k operations vs 100k on my computer).
+		 * However, if you want accurate timing/time since page load, using performance.now() is the better option.
+		 * It's purely dependent on the time since the code started running, and clock changes do not affect the time.
+		 * It's also more accurate: counting tenths of a millisecond instead of milliseconds.
+		 *
+		 * Link: https://stackoverflow.com/questions/30795525/performance-now-vs-date-now
+		 *
+		 * Look into that
+		 */
+		if(!gameManager.startTime){
+			gameManager.startTime = performance.now();
+		}
 		//TODO implement Delta Time
 		let currentTimeStamp = performance.now();
 		gameManager.currentDeltaTime = currentTimeStamp - gameManager.previousTimeStamp;
-		gameManager.previousTimeStamp = currentTimeStamp;
+		document.querySelector("#fps_time").innerHTML = gameManager.fps_time;
+		if(gameManager.currentDeltaTime >= gameManager.fps_time){
 
-		canvas.clearScreen();
-		//TODO change -> for of loop
-		for (let gameLoopState = 0; gameLoopState < Object.keys(GameManager.gameStates).length; gameLoopState++) {
+			gameManager.previousTimeStamp = currentTimeStamp - (gameManager.currentDeltaTime % gameManager.fps_time);
 
-			gameManager.gameObjects.forEach((gameObject) => {
-				if (gameObject.isActive) {
-					switch (gameLoopState) {
+			document.querySelector("#curTime").innerHTML = gameManager.currentDeltaTime;
 
-						case GameManager.gameStates.storeAndUpdate:
-							if(gameManager.stopCurrentLoop){
-								break;
-							}
-							gameObject.storePosition();
-							gameObject.update();
-							break;
+			var sinceStart = currentTimeStamp - gameManager.startTime;
+			var currentFps = Math.round(1000 / (sinceStart / ++gameManager.framecount) * 100) / 100;
+			document.querySelector("#fps").innerHTML = currentFps;
+			canvas.clearScreen();
 
-						case GameManager.gameStates.collisionCheck:
-							if(gameManager.stopCurrentLoop){
-								break;
-							}
-							gameObject.currentGravityCollisionObject = null;
-							gameManager.checkObjectsForCollisions(gameObject);
-							break;
+			//TODO change -> for of loop
 
-						case GameManager.gameStates.applyGravity:
-							if(gameManager.stopCurrentLoop){
-								break;
-							}
-							if(gameObject.useGravity){
-								GravityHelper.applyGravityForces(gameObject, false);
-							}
-							break;
+			for (let gameLoopState = 0; gameLoopState < Object.keys(GameManager.gameStates).length; gameLoopState++) {
 
-						case GameManager.gameStates.gravityCollisionCheck:
-							if(gameManager.stopCurrentLoop){
-								break;
-							}
-							gameManager.checkObjectsForGravityCollisions(gameObject);
-							break;
+				gameManager.gameObjects.forEach((gameObject) => {
+					if (gameObject.isActive) {
+						switch (gameLoopState) {
 
-						case GameManager.gameStates.gravityRevert:
-							if(gameManager.stopCurrentLoop){
-								break;
-							}
-							if (gameObject.useGravity) {
-								if (gameObject.currentGravityCollisionObject != null) {
-									GravityHelper.applyGravityForces(gameObject, true);
-									GravityHelper.applyGameObjectToHitPlatform(gameObject);
-								} else {
-									gameObject.isFalling = true;
+							case GameManager.gameStates.storeAndUpdate:
+								if(gameManager.stopCurrentLoop){
+									break;
 								}
-							}
-							break;
+								gameObject.storePosition();
+								gameObject.update();
+								break;
 
-						case GameManager.gameStates.mouseEvents:
-							if(gameManager.stopCurrentLoop){
+							case GameManager.gameStates.collisionCheck:
+								if(gameManager.stopCurrentLoop){
+									break;
+								}
+								gameObject.currentGravityCollisionObject = null;
+								gameManager.checkObjectsForCollisions(gameObject);
 								break;
-							}
-							mouseHelper.checkObjectMouseEvent(gameObject);
-							break;
-						case GameManager.gameStates.draw:
-							if(gameManager.stopCurrentLoop){
+
+							case GameManager.gameStates.applyGravity:
+								if(gameManager.stopCurrentLoop){
+									break;
+								}
+								if(gameObject.useGravity){
+									GravityHelper.applyGravityForces(gameObject, false);
+								}
 								break;
-							}
-							//gameObject.rotate();
-							gameObject.draw();
-							//gameObject.restoreCanvas();
-							break;
+
+							case GameManager.gameStates.gravityCollisionCheck:
+								if(gameManager.stopCurrentLoop){
+									break;
+								}
+								gameManager.checkObjectsForGravityCollisions(gameObject);
+								break;
+
+							case GameManager.gameStates.gravityRevert:
+								if(gameManager.stopCurrentLoop){
+									break;
+								}
+								if (gameObject.useGravity) {
+									if (gameObject.currentGravityCollisionObject != null) {
+										GravityHelper.applyGravityForces(gameObject, true);
+										GravityHelper.applyGameObjectToHitPlatform(gameObject);
+									} else {
+										gameObject.isFalling = true;
+									}
+								}
+								break;
+
+							case GameManager.gameStates.mouseEvents:
+								if(gameManager.stopCurrentLoop){
+									break;
+								}
+								mouseHelper.checkObjectMouseEvent(gameObject);
+								break;
+							case GameManager.gameStates.draw:
+								if(gameManager.stopCurrentLoop){
+									break;
+								}
+								//gameObject.rotate();
+								gameObject.draw();
+								gameObject.debugDraw();
+								//gameObject.restoreCanvas();
+								break;
+						}
 					}
-				}
-			});
+				});
 
-			if(gameLoopState === GameManager.gameStates.draw){
-				gameManager.stopCurrentLoop = false;
+				if(gameLoopState === GameManager.gameStates.draw){
+					gameManager.stopCurrentLoop = false;
+				}
 			}
+
+
+			mouseHelper.recentMouseEvent = 0;
+
 		}
-		mouseHelper.recentMouseEvent = 0;	
+
 		requestAnimationFrame(gameManager.gameLoop);
 	}
 

@@ -8,13 +8,17 @@
 
 #background {
     background-color: gray;
-    /*
-     background: url("../images/background.jpg");
-     */
     background-size: cover;
 }
 
 #gameContainer {
     position: relative; 
     height: 500px;
+}
+
+#fps {
+    padding-left: 0.5rem;
+    font-size: 2rem;
+    font-weight: bold;
+    color: white;
 }

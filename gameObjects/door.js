@@ -22,21 +22,17 @@ class Door extends GameObject {
                 gameManager.currentRoom.visited = true;
                 switch (this.name){
                     case "n":
-                        skeleton.position.x = 352;
                         skeleton.position.y = 444-64;
                         break;
                     case "e":
                         skeleton.position.x = 70;
-                        skeleton.position.y = 224;
                         break;
                     case "s":
-                        skeleton.position.x = 352;
                         skeleton.position.y = 70;
                         break;
                     case "w":
                         console.log("dsad");
                         skeleton.position.x = 640;
-                        skeleton.position.y = 224;
                         break;
                 }
 

@@ -1,10 +1,6 @@
 //this file sets up your game (create the instances of your gameObjects)
 
 //this has to be done always at first - for any game!
-let enemy = new Enemy("enemy", 400, 308, 64, 64, "images/spider04.png");
-enemy.addAnimationInformation("walk_left", 14, 19);
-enemy.addAnimationInformation("walk_right", 34, 39);
-
 
 
 let gameManager = new GameManager();
@@ -12,6 +8,7 @@ let gameManager = new GameManager();
 let canvas = new Canvas("canvas");
 
 let skeleton = new PlayerFigure("player", 352, 224, 64, 64, "images/character_spritesheett.png");
+skeleton.setBoundaryOffsets(10,-10,5,-5);
 skeleton.addAnimationInformation("walk_up", 39, 42);
 skeleton.addAnimationInformation("walk_left", 51, 57)
 skeleton.addAnimationInformation("walk_right", 21, 27);
@@ -26,6 +23,7 @@ let miniMap = new MiniMap("mini",canvas.canvasBoundaries.right-130,5,125,125);
 gameManager.currentRoom.addEntity(miniMap);
 
 gameManager.setUpRoom();
+let startTime = performance.now();
 requestAnimationFrame(gameManager.gameLoop);
 
 

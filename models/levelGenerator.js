@@ -1,7 +1,7 @@
 class LevelGenerator{
 
 
-    static generateLevel(minNumberOfRooms = 50, maxNumberRooms = 100 ){
+    static generateLevel(minNumberOfRooms = 10, maxNumberRooms = 15 ){
 
         let roomList;
         let finsihedGeneration = false;
@@ -68,7 +68,7 @@ class LevelGenerator{
                 }
             }
             try {
-                let roomWithOneConnection = roomList.filter(room => room.numberConnections === 1);
+                let roomWithOneConnection = roomList.filter(room => room.numberConnections === 1 && room.x_pos !== 0 && room.y_pos !== 0);
                 if(roomWithOneConnection){
                     if(roomWithOneConnection.length >= 3){
 
