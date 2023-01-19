@@ -104,14 +104,16 @@ class Room{
                     this.containedEntites.push(this.roomTiles[y][x]);
 
                 }else{
+
                     let rng = Math.random();
-                    if(rng > 0.9){
+                    if(rng > 1){
                         this.roomTiles[y][x] = new Rock("rock", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y)
                         this.containedEntites.push(this.roomTiles[y][x]);
-                    }else if(rng < 0.25){
-                        this.roomTiles[y][x] = new PowerUp("powerUp", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y)
+                    }else if(rng < 0.01){
+                        this.roomTiles[y][x] = new BombItem("bombItem", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y)
                         this.containedEntites.push(this.roomTiles[y][x]);
                     }
+
                 }
             }
         }

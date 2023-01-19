@@ -24,27 +24,27 @@ function keyDown(eventInformation) {
 			break;
 		case "ArrowLeft":
 			// Left pressed
-			console.log("Punch Left");
+			console.log("PlayerPunch Left");
 			skeleton.punch = "left";
 			break;
 		case "ArrowRight":
 			// Right pressed
-			console.log("Punch Right");
+			console.log("PlayerPunch Right");
 			skeleton.punch = "right";
 			break;
 		case "ArrowUp":
 			// Up pressed
-			console.log("Punch Up");
+			console.log("PlayerPunch Up");
 			skeleton.punch = "up";
 			break;
 		case "ArrowDown":
 			// Down pressed
-			console.log("Punch Down");
+			console.log("PlayerPunch Down");
 			skeleton.punch = "down";
 			break;
 		case "e":
 			// Down pressed
-			console.log("Punch Down");
+			console.log("PlayerPunch Down");
 			skeleton.bomb = true;
 			break;
 	}

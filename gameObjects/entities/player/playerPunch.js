@@ -1,5 +1,5 @@
 
-class Punch extends GameObject {
+class PlayerPunch extends GameObject {
 
 
     constructor(name, x, y, width, height, offSetX, offSetY) {

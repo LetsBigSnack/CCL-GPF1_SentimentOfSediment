@@ -8,10 +8,20 @@ class PlayerFigure extends ImageObject {
     };
 
     moveVelocity = 3;
-    startJump = false;
-    punch = "";
+
+
+    health = 100;
+
     bomb = false;
+    bombNumber = 3;
+    bombCooldown = true;
+    bombCooldownTimer = 300;
+
+    punch = "";
     punchCooldown = true;
+    punchCooldownTimer = 1000;
+    punchDamage = 30;
+
 
     constructor(name, x, y, width, height, src) {
         super(name, x, y, width, height, src);
@@ -21,6 +31,7 @@ class PlayerFigure extends ImageObject {
     }
 
     update() {
+
         this.position.x += this.moveBy.left;
         this.position.y += this.moveBy.top;
         if(this.punch){
@@ -28,9 +39,9 @@ class PlayerFigure extends ImageObject {
         }
         if(this.bomb){
             this.spawnBomb();
+
         }
         this.checkWorldPostion();
-        console.log(this.punchCooldown);
     }
     
     checkWorldPostion() {
@@ -50,15 +61,14 @@ class PlayerFigure extends ImageObject {
 
     //TODO write CLEAN delete Object afterwards
     //TODO take offset into consideration
-    //TODO add Attributes to the Punch
+    //TODO add Attributes to the PlayerPunch
     spawnPunch(punch){
         if(this.punchCooldown){
             this.punchCooldown = false;
-            console.log("test");
             let punchObject
             switch (punch){
                 case "left":
-                    punchObject = new Punch("punch", this.position.x-32, this.position.y,64,64, -64, 0);
+                    punchObject = new PlayerPunch("punch", this.position.x-32, this.position.y,64,64, -64, 0);
                     gameManager.addGameObject(punchObject);
 
                     setTimeout(() => {
@@ -67,7 +77,7 @@ class PlayerFigure extends ImageObject {
 
                     break;
                 case "right":
-                    punchObject = new Punch("punch", this.position.x+this.dimensions.width-32, this.position.y,64,64, this.dimensions.width, 0);
+                    punchObject = new PlayerPunch("punch", this.position.x+this.dimensions.width-32, this.position.y,64,64, this.dimensions.width, 0);
                     gameManager.addGameObject(punchObject);
 
                     setTimeout(() => {
@@ -76,7 +86,7 @@ class PlayerFigure extends ImageObject {
 
                     break;
                 case "up":
-                    punchObject = new Punch("punch", this.position.x, this.position.y-this.dimensions.height+32,64,64, 0, -this.dimensions.height);
+                    punchObject = new PlayerPunch("punch", this.position.x, this.position.y-this.dimensions.height+32,64,64, 0, -this.dimensions.height);
                     gameManager.addGameObject(punchObject);
 
                     setTimeout(() => {
@@ -85,7 +95,7 @@ class PlayerFigure extends ImageObject {
                     break;
 
                 case "down":
-                    punchObject = new Punch("punch", this.position.x, this.position.y+this.dimensions.height-32,64,64, 0, +this.dimensions.height);
+                    punchObject = new PlayerPunch("punch", this.position.x, this.position.y+this.dimensions.height-32,64,64, 0, +this.dimensions.height);
                     gameManager.addGameObject(punchObject);
 
                     setTimeout(() => {
@@ -97,16 +107,26 @@ class PlayerFigure extends ImageObject {
             }
             setTimeout(() => {
                 this.punchCooldown = true;
-            }, "400");
+            }, this.punchCooldownTimer);
         }
         this.punch = "";
     }
 
     spawnBomb(){
-        let bomb = new Bomb("punch", this.position.x, this.position.y,64,64);
-        gameManager.addGameObject(bomb);
-        this.bomb = false;
+        console.log(this.bombCooldown);
+        if(this.bombCooldown && this.bombNumber > 0){
 
+            this.bombCooldown = false;
+            let bomb = new Bomb("punch", this.position.x, this.position.y,64,64);
+            gameManager.currentRoom.addEntity(bomb);
+            gameManager.addGameObject(bomb);
+            this.bombNumber--;
+            setTimeout(() => {
+                this.bombCooldown = true;
+            }, this.bombCooldownTimer);
+
+        }
+        this.bomb = false;
     }
 
     onCollision(otherObject) {
