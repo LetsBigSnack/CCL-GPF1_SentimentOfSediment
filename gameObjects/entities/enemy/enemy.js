@@ -6,13 +6,17 @@ class Enemy extends GameObject {
     };
 
     speed = 2;
-
+    health = 1000;
+    damage = 10;
     constructor(name, x, y, width, height) {
         super(name, x, y, width, height);
         console.log("Enemy has been created");
     }
 
     update() {
+        if(this.health <= 0){
+            this.isActive = false;
+        }
         this.searchPlayer();
         this.position.x += this.moveBy.x * this.speed;
         this.position.y += this.moveBy.y * this.speed;
@@ -57,6 +61,30 @@ class Enemy extends GameObject {
         if(otherObject.name == "obstacle") {
             this.moveBy.x *= -1;
             this.moveBy.y *= -1;
+
+        }
+        if(otherObject.name == "player" || otherObject.name == "enemy"){
+            this.restorePosition();
+        }
+        if(otherObject.name == "punch") {
+            this.health -= skeleton.punchDamage;
+
+            switch(otherObject.direction){
+                case "left":
+                    this.position.x -= 10;
+                    break;
+                case "right":
+                    this.position.x += 10;
+                    break;
+                case "up":
+                    this.position.y -= 10;
+                    break;
+                case "down":
+                    this.position.y += 10;
+                    break;
+
+            }
+            console.log(skeleton.punch);
         }
     }
 

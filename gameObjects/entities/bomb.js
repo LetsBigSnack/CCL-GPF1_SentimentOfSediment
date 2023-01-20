@@ -4,6 +4,7 @@ class Bomb extends GameObject {
     frameUntilExplode = 120;
     currentFrameCount = 0;
     explode = false;
+    bombDamage = 300;
 
     constructor(name, x, y, width, height) {
         super(name, x, y, width, height);
@@ -24,6 +25,8 @@ class Bomb extends GameObject {
                 this.isActive = false;
             }, "200")
         }
+
+        console.log(this.explode);
 
     }
 
@@ -63,6 +66,10 @@ class Bomb extends GameObject {
         if(this.explode){
             if(otherObject.name == "rock") {
                 otherObject.isActive = false;
+            }
+            if(otherObject.name == "player" || otherObject.name == "enemy") {
+                console.log("ahahahaha");
+                otherObject.health -= this.bombDamage;
             }
         }
 

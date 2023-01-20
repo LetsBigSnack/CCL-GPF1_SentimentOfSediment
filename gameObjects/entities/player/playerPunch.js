@@ -2,10 +2,11 @@
 class PlayerPunch extends GameObject {
 
 
-    constructor(name, x, y, width, height, offSetX, offSetY) {
+    constructor(name, x, y, width, height, offSetX, offSetY, direction) {
         super(name, x, y, width, height);
         this.offSetX = offSetX;
         this.offSetY = offSetY;
+        this.direction = direction;
 
     }
 

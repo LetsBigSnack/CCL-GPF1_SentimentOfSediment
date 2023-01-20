@@ -8,7 +8,7 @@ let gameManager = new GameManager();
 let canvas = new Canvas("canvas");
 
 let skeleton = new PlayerFigure("player", 352, 224, 64, 64, "images/character_spritesheett.png");
-skeleton.setBoundaryOffsets(10,-10,5,-5);
+skeleton.setBoundaryOffsets(15,-15,10,-5);
 skeleton.addAnimationInformation("walk_up", 39, 42);
 skeleton.addAnimationInformation("walk_left", 51, 57)
 skeleton.addAnimationInformation("walk_right", 21, 27);

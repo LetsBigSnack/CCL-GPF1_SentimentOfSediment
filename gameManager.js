@@ -33,7 +33,9 @@ class GameManager {
 
 		this.rooms = LevelGenerator.generateLevel();
 		this.currentRoom = this.rooms.filter(room => room.x_pos === 0 &&  room.y_pos === 0)[0];
-		this.currentRoom.addEntity(new Enemy("nemeny", 300,300,64,64));
+		this.currentRoom.addEntity(new Enemy("enemy", 300,300,64,64));
+		this.currentRoom.addEntity(new Enemy("enemy", 100,200,64,64));
+		this.currentRoom.addEntity(new Enemy("enemy", 400,300,64,64));
 		this.currentRoom.setUpWalls();
 		this.currentRoom.visited = true;
 		console.log("gameManager created");
