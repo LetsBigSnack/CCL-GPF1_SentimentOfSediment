@@ -8,18 +8,37 @@ class Enemy extends GameObject {
     speed = 2;
     health = 1000;
     damage = 10;
+
+    knockback = false;
+    knockbackDirection = "";
+    knockbackCurrentFrame = 0;
+    knockbackFrameCountdown = 1;
+    knocbackCooldown = true;
+
+
     constructor(name, x, y, width, height) {
         super(name, x, y, width, height);
         console.log("Enemy has been created");
+        this.mass = 2;
     }
 
     update() {
-        if(this.health <= 0){
-            this.isActive = false;
+        if(gameManager.framesInRoom >= gameManager.catchUpFrames){
+            if(this.health <= 0){
+
+                this.isActive = false;
+                this.spawnItem();
+            }
+            if(this.knockback){
+                this.moveBy.x = 0;
+                this.moveBy.y = 0;
+                this.knockBack();
+            }else{
+                this.searchPlayer();
+            }
+            this.position.x += this.moveBy.x * this.speed;
+            this.position.y += this.moveBy.y * this.speed;
         }
-        this.searchPlayer();
-        this.position.x += this.moveBy.x * this.speed;
-        this.position.y += this.moveBy.y * this.speed;
     }
 
     searchPlayer(){
@@ -58,6 +77,7 @@ class Enemy extends GameObject {
     }
 
     onCollision(otherObject) {
+        console.log("sadas");
         if(otherObject.name == "obstacle") {
             this.moveBy.x *= -1;
             this.moveBy.y *= -1;
@@ -65,27 +85,65 @@ class Enemy extends GameObject {
         }
         if(otherObject.name == "player" || otherObject.name == "enemy"){
             this.restorePosition();
+            if(otherObject.name == "enemy" && this.knockback){
+                otherObject.knockbackDirection = this.knockbackDirection;
+                otherObject.knockback = true;
+            }
         }
         if(otherObject.name == "punch") {
             this.health -= skeleton.punchDamage;
-
-            switch(otherObject.direction){
-                case "left":
-                    this.position.x -= 10;
-                    break;
-                case "right":
-                    this.position.x += 10;
-                    break;
-                case "up":
-                    this.position.y -= 10;
-                    break;
-                case "down":
-                    this.position.y += 10;
-                    break;
-
-            }
-            console.log(skeleton.punch);
+            this.knockbackDirection = otherObject.direction;
+            this.knockback = true;
         }
     }
+
+    knockBack(){
+            if(this.knockbackCurrentFrame <= this.knockbackFrameCountdown && this.knocbackCooldown){
+                switch(this.knockbackDirection){
+                    case "left":
+                        this.moveBy.x -= 10/this.mass;
+                        break;
+                    case "right":
+                        this.moveBy.x  +=  10/this.mass;
+                        break;
+                    case "up":
+                        this.moveBy.y  -=  10/this.mass;
+                        break;
+                    case "down":
+                        this.moveBy.y +=  10;
+                        break;
+                }
+                this.knockbackCurrentFrame++;
+
+            }else{
+                this.knockback = false;
+                this.knockbackCurrentFrame = 0;
+                this.knocbackCooldown = false;
+                setTimeout(() => {
+                    this.knocbackCooldown = true;
+                }, 100);
+            }
+    }
+
+    spawnItem(){
+
+        let rngItems = [
+            new BombItem("bombItem", this.position.x, this.position.y, this.dimensions.width, this.dimensions.height),
+            new HealItem("healItem", this.position.x, this.position.y, this.dimensions.width, this.dimensions.height),
+        ]
+
+        for(let i = 0; i < skeleton.luck; i++){
+            let rng = Math.random();
+            if(rng < 0.15){
+                let item = rngItems[Math.floor(Math.random()*rngItems.length)];
+                //TODO implement add Entity --> addGameObject
+                gameManager.currentRoom.addEntity(item);
+                gameManager.addGameObject(item);
+                return;
+            }
+        }
+    }
+
+
 
 }

@@ -1,5 +1,15 @@
 class PickUp extends GameObject{
 
+    static RockTypes = [
+        "amethyst",
+        "granite",
+        "limestone",
+        "obsidian",
+        "quartz",
+        "ruby"
+    ];
+
+
     constructor(name, x, y, width, height) {
         super(name, x, y, width, height);
     }
@@ -18,6 +28,10 @@ class PickUp extends GameObject{
             this.effectOnPickUp(otherObject);
             this.isActive = false;
         }
+    }
+
+    effectOnPickUp(otherObject){
+
     }
 
 }

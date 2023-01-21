@@ -16,6 +16,8 @@ class GameManager {
 	};
 	stopCurrentLoop = false;
 
+
+
 	/**
 	 * The class constructor for the class "GameManager"
 	 */
@@ -33,13 +35,18 @@ class GameManager {
 
 		this.rooms = LevelGenerator.generateLevel();
 		this.currentRoom = this.rooms.filter(room => room.x_pos === 0 &&  room.y_pos === 0)[0];
-		this.currentRoom.addEntity(new Enemy("enemy", 300,300,64,64));
-		this.currentRoom.addEntity(new Enemy("enemy", 100,200,64,64));
-		this.currentRoom.addEntity(new Enemy("enemy", 400,300,64,64));
+		this.currentRoom.addEntity(new ShootingEnemy("enemy", 300,300,64,64));
+		/**
+		 *
+		 *        this.currentRoom.addEntity(new Enemy("enemy", 100,200,64,64));
+		 *        this.currentRoom.addEntity(new Enemy("enemy", 400,300,64,64));
+		 */
 		this.currentRoom.setUpWalls();
 		this.currentRoom.visited = true;
 		console.log("gameManager created");
 		this.startTime = undefined;
+		this.framesInRoom = 0;
+		this.catchUpFrames = 10;
 	}
 
 
@@ -79,9 +86,11 @@ class GameManager {
 			canvas.clearScreen();
 
 			//TODO change -> for of loop
-
+			if(gameManager.framesInRoom < gameManager.catchUpFrames){
+				gameManager.framesInRoom++;
+			}
 			for (let gameLoopState = 0; gameLoopState < Object.keys(GameManager.gameStates).length; gameLoopState++) {
-
+				console.log(gameManager.framesInRoom)
 				gameManager.gameObjects.forEach((gameObject) => {
 					if (gameObject.isActive) {
 						switch (gameLoopState) {

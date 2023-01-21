@@ -1,7 +1,7 @@
 class LevelGenerator{
 
 
-    static generateLevel(minNumberOfRooms = 10, maxNumberRooms = 15 ){
+    static generateLevel(minNumberOfRooms = 5, maxNumberRooms = 8 ){
 
         let roomList;
         let finsihedGeneration = false;
@@ -71,9 +71,13 @@ class LevelGenerator{
                 let roomWithOneConnection = roomList.filter(room => room.numberConnections === 1 && room.x_pos !== 0 && room.y_pos !== 0);
                 if(roomWithOneConnection){
                     if(roomWithOneConnection.length >= 3){
-
+                        //TODO make less scuffed
                         for(let uniqueRooms = 0; uniqueRooms < 3; uniqueRooms++){
-                            roomWithOneConnection[uniqueRooms].type = uniqueRooms+1;
+                            if(uniqueRooms === 2){
+                                roomWithOneConnection[uniqueRooms].type = 1;
+                            }else{
+                                roomWithOneConnection[uniqueRooms].type = uniqueRooms+1;
+                            }
                             console.log( roomWithOneConnection[uniqueRooms].type);
                         }
                         finsihedGeneration = true;

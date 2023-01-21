@@ -55,13 +55,14 @@ class Room{
     }
 
     setUpWalls(){
+        let itemRockSpawned = false;
+
         for (let y = 0; y < this.roomTiles.length; y++){
             for (let x = 0; x < this.roomTiles[y].length; x++){
                 if(y === 0 || y === this.roomTiles.length-1){
                     if(y === 0 && (x === 5 || x === 6)){
                         if( this.connectedRooms["n"] ){
                             this.roomTiles[y][x] =   new Door("n", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y);
-                            this.roomTiles[y][x].setBoundaryOffsets(0,0,0,-55);
                             this.containedEntites.push(this.roomTiles[y][x]);
                             continue;
                         }
@@ -70,7 +71,6 @@ class Room{
                     if(y === this.roomTiles.length-1 && (x === 5 || x === 6)){
                         if( this.connectedRooms["s"]){
                             this.roomTiles[y][x] =   new Door("s", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y);
-                            this.roomTiles[y][x].setBoundaryOffsets(0,0,55,0);
                             this.containedEntites.push(this.roomTiles[y][x]);
                             continue;
                         }
@@ -85,7 +85,6 @@ class Room{
                     if(x === 0 && (y === 3 || y === 4)){
                         if( this.connectedRooms["w"] ){
                             this.roomTiles[y][x] =   new Door("w", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y);
-                            this.roomTiles[y][x].setBoundaryOffsets(0,-55,0,0);
                             this.containedEntites.push(this.roomTiles[y][x]);
                             continue;
                         }
@@ -94,7 +93,6 @@ class Room{
                     if(x === this.roomTiles[y].length-1 && (y === 3 || y === 4)){
                         if( this.connectedRooms["e"]){
                             this.roomTiles[y][x] =   new Door("e", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y);
-                            this.roomTiles[y][x].setBoundaryOffsets(55,0,0,0);
                             this.containedEntites.push(this.roomTiles[y][x]);
                             continue;
                         }
@@ -104,15 +102,47 @@ class Room{
                     this.containedEntites.push(this.roomTiles[y][x]);
 
                 }else{
-
-                    let rng = Math.random();
-                    if(rng > 1){
-                        this.roomTiles[y][x] = new Rock("rock", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y)
-                        this.containedEntites.push(this.roomTiles[y][x]);
-                    }else if(rng < 0.01){
-                        this.roomTiles[y][x] = new BombItem("bombItem", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y)
-                        this.containedEntites.push(this.roomTiles[y][x]);
+                    //Reworke Item rock spawn // just used for testing
+                    if(this.type === Room.roomTypes.Item && !itemRockSpawned && y > 4 && y < 6 && x > 3 && x < 10 ){
+                        let rng = Math.random();
+                        if(rng > 0.5){
+                            this.roomTiles[y][x] = new ItemRock(PickUp.RockTypes[Math.floor(Math.random()*PickUp.RockTypes.length)], x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y)
+                            this.containedEntites.push(this.roomTiles[y][x]);
+                            itemRockSpawned = true;
+                        }
                     }
+
+                    if(this.type !== Room.roomTypes.Item && y > 4 && y < 6 && x > 3 && x < 10 ){
+
+                        if(this.x_pos !== 0 || this.y_pos !== 0){
+                            let rng = Math.random();
+                            let chance = 0.75;
+
+                            if(this.type === Room.roomTypes.Boss){
+                                chance = 0.35;
+                            }
+                            if(rng > chance){
+
+                                this.roomTiles[y][x] = new Enemy("enemy", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y)
+                                this.containedEntites.push(this.roomTiles[y][x]);
+                            }
+                        }
+
+                    }
+
+                    /**
+                     * let rng = Math.random();
+                     *                     if(rng > 1){
+                     *                         this.roomTiles[y][x] = new ItemRock("rock", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y)
+                     *                         this.containedEntites.push(this.roomTiles[y][x]);
+                     *                     }else if(rng < 0.15 && rng > 0.1 ){
+                     *                         this.roomTiles[y][x] = new BombItem("bombItem", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y)
+                     *                         this.containedEntites.push(this.roomTiles[y][x]);
+                     *                     }else if(rng < 0.05) {
+                     *                         this.roomTiles[y][x] = new HealItem("healItem", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y)
+                     *                         this.containedEntites.push(this.roomTiles[y][x]);
+                     *                     }
+                     */
 
                 }
             }

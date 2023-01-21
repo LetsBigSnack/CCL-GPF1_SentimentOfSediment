@@ -9,24 +9,30 @@ class PlayerFigure extends ImageObject {
 
     moveVelocity = 3;
 
-
+    maxHealth = 100;
     health = 100;
 
+    luck = 1;
+
     bomb = false;
-    bombNumber = 3;
+    bombNumber = 1;
     bombCooldown = true;
-    bombCooldownTimer = 300;
+    bombCooldownTimer = 400;
 
     punch = "";
     punchCooldown = true;
     punchCooldownTimer = 1000;
     punchDamage = 50;
-
+    punchDuration = 200;
 
     invincible = false;
     invincibleFrame = 0;
-    invicibilityFramesCooldown = 30;
+    invincibilityFramesCooldown = 30;
 
+    punchCooldownMax = 300;
+    moveVelocityMax = 5;
+
+    maxInvincibilityFrameCooldown = 60;
 
 
     constructor(name, x, y, width, height, src) {
@@ -38,6 +44,7 @@ class PlayerFigure extends ImageObject {
 
     update() {
         if(this.health <= 0){
+            this.health = 0;
             this.isActive = false;
         }
         this.checkInvicibility();
@@ -69,7 +76,7 @@ class PlayerFigure extends ImageObject {
     }
 
     checkInvicibility(){
-        if(this.invincibleFrame >= this.invicibilityFramesCooldown){
+        if(this.invincibleFrame >= this.invincibilityFramesCooldown){
             this.invincible = false;
             this.invincibleFrame = 0;
         }else{
@@ -91,7 +98,7 @@ class PlayerFigure extends ImageObject {
 
                     setTimeout(() => {
                         punchObject.isActive = false;
-                    }, "200")
+                    }, this.punchDuration)
 
                     break;
                 case "right":
@@ -100,7 +107,7 @@ class PlayerFigure extends ImageObject {
 
                     setTimeout(() => {
                         punchObject.isActive = false;
-                    }, "200")
+                    },  this.punchDuration)
 
                     break;
                 case "up":
@@ -109,7 +116,7 @@ class PlayerFigure extends ImageObject {
 
                     setTimeout(() => {
                         punchObject.isActive = false;
-                    }, "200")
+                    },  this.punchDuration)
                     break;
 
                 case "down":
@@ -118,7 +125,7 @@ class PlayerFigure extends ImageObject {
 
                     setTimeout(() => {
                         punchObject.isActive = false;
-                    }, "200")
+                    },  this.punchDuration)
                     break;
 
                     break;
@@ -171,17 +178,57 @@ class PlayerFigure extends ImageObject {
     }
 
     onCollision(otherObject) {
-        console.log(this.health);
-        if(otherObject.name == "enemy"){
+        if(otherObject.name == "enemy" || otherObject.name == "bullet" ){
             if(!this.invincible){
-                console.log("ouch");
                 this.health -= otherObject.damage;
                 this.invincible = true;
             }
-
-
         }
+    }
 
+    heal(number){
+        this.health += number;
+        if(this.health > this.maxHealth){
+            this.health = this.maxHealth;
+        }
+    }
+
+    addHealth(number){
+        this.maxHealth += number;
+        this.health = this.maxHealth;
+    }
+
+    subPunchCooldown(number){
+        if(this.punchCooldownTimer - number >= this.punchCooldownMax){
+            this.punchCooldownTimer -= number;
+        }else{
+            this.punchCooldownTimer = this.punchCooldownMax;
+        }
+    }
+
+    addMoveVelocity(number){
+
+        if(this.moveVelocity + number <= this.moveVelocityMax){
+            this.moveVelocity += number;
+        }else{
+            this.moveVelocity =  this.moveVelocityMax;
+        }
+    }
+
+    addLuck(number){
+        this.luck += number;
+    }
+
+    addPunchDamage(number){
+        this.punchDamage += number;
+    }
+
+    addInvincibilityCooldown(number){
+        if(this.invincibilityFramesCooldown + number <= this.maxInvincibilityFrameCooldown){
+            this.invincibilityFramesCooldown += number;
+        }else {
+            this.invincibilityFramesCooldown =  this.maxInvincibilityFrameCooldown;
+        }
     }
 
 }

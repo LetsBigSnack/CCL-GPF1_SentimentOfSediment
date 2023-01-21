@@ -64,11 +64,7 @@ class Bomb extends GameObject {
 
     onCollision(otherObject) {
         if(this.explode){
-            if(otherObject.name == "rock") {
-                otherObject.isActive = false;
-            }
             if(otherObject.name == "player" || otherObject.name == "enemy") {
-                console.log("ahahahaha");
                 otherObject.health -= this.bombDamage;
             }
         }

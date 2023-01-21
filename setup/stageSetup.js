@@ -19,8 +19,11 @@ skeleton.addAnimationInformation("idle_left", 50, 50);
 skeleton.addAnimationInformation("idle_right", 20, 20);
 skeleton.addAnimationInformation("idle_down", 7, 7);
 let miniMap = new MiniMap("mini",canvas.canvasBoundaries.right-130,5,125,125);
-
+let playerUI = new PlayerNumbers("playerNumbers",canvas.canvasBoundaries.left+20,100,140,70);
+let playerStats = new PlayerStats("playerStats",canvas.canvasBoundaries.left+20,200,100,100)
 gameManager.currentRoom.addEntity(miniMap);
+gameManager.currentRoom.addEntity(playerUI);
+gameManager.currentRoom.addEntity(playerStats);
 
 gameManager.setUpRoom();
 let startTime = performance.now();

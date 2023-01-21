@@ -1,5 +1,6 @@
 class Rock extends Obstacle {
 
+    destroyed = false;
     constructor(name, x, y, width, height) {
         super(name, x, y, width, height);
 
@@ -13,6 +14,14 @@ class Rock extends Obstacle {
         gameManager.canvas.drawLayer.fill();
         gameManager.canvas.drawLayer.stroke();
         gameManager.canvas.drawLayer.closePath();
+    }
+
+    onCollision(otherObject) {
+        super.onCollision(otherObject);
+        if(otherObject.name == "bomb" && otherObject.explode) {
+            this.isActive = false;
+            this.destroyed = true;
+        }
     }
 
 
