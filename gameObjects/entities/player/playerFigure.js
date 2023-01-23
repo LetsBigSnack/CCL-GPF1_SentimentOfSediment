@@ -46,6 +46,7 @@ class PlayerFigure extends ImageObject {
         if(this.health <= 0){
             this.health = 0;
             this.isActive = false;
+            gameManager.gameOver();
         }
         this.checkInvicibility();
         this.position.x += this.moveBy.left;
@@ -229,6 +230,37 @@ class PlayerFigure extends ImageObject {
         }else {
             this.invincibilityFramesCooldown =  this.maxInvincibilityFrameCooldown;
         }
+    }
+
+    resetPlayer(){
+
+        this.position.x = 352
+        this.position.y = 224;
+        this.moveBy.x = 0;
+        this.moveBy.y = 0;
+
+        this.isActive = true;
+        this.moveVelocity = 3;
+
+        this.maxHealth = 100;
+        this. health = 100;
+
+        this.luck = 1;
+
+        this.bomb = false;
+        this.bombNumber = 1;
+
+        this.punch = "";
+        this.punchCooldown = true;
+        this.punchCooldownTimer = 1000;
+        this.punchDamage = 50;
+        this.punchDuration = 200;
+
+        this.invincible = false;
+        this.invincibleFrame = 0;
+        this.invincibilityFramesCooldown = 30;
+
+
     }
 
 }

@@ -1,8 +1,8 @@
-class Obstacle extends GameObject {
+class Obstacle extends ImageObject {
 
     placement = "";
-    constructor(name, x, y, width, height) {
-        super(name, x, y, width, height);
+    constructor(name, x, y, width, height,src="images/character_spritesheett.png") {
+        super(name, x, y, width, height,src);
         this.isRigid = true;
     }
 

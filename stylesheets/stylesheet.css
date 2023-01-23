@@ -26,8 +26,10 @@
     font-size: 2rem;
     font-weight: bold;
     color: white;
+    display: none;
 }
 
 #info {
+    display: none;
     pointer-events: none;
 }

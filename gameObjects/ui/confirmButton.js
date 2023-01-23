@@ -39,7 +39,20 @@ class ConfirmButton extends ImageObject {
             this.parent.confirmButton.isActive = false;
 
             if(this.parent instanceof PauseMenu){
-                gameManager.togglePause();
+                if(this.name === "Menu"){
+                    this.parent.disable();
+                    gameManager.currentState = GameManager.states.MainMenu;
+                }else{
+                    gameManager.togglePause();
+                }
+            }
+            if(this.parent instanceof GameOverMenu){
+                if(this.name === "Menu"){
+                    this.parent.disable();
+                    gameManager.currentState = GameManager.states.MainMenu;
+                }else{
+                    gameManager.restartGame();
+                }
             }
 
         }

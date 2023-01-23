@@ -1,4 +1,4 @@
-class MenuButton extends ImageObject {
+class MenuButton extends GameObject {
 
     color = "green";
 
@@ -33,6 +33,7 @@ class MenuButton extends ImageObject {
         if(mouseEvent === MouseHelper.mouseEventCodes.LeftClick){
             switch (this.name) {
                 case MenuButton.buttonNames.Play:
+                    gameManager.restartGame();
                     gameManager.currentState = GameManager.states.Playing;
                     break;
                 case MenuButton.buttonNames.Story:

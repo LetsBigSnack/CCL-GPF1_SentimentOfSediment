@@ -78,8 +78,30 @@ class Room{
                             continue;
                         }
                     }
+                    if(y === 0){
+                        if(x === 0){
+                            this.roomTiles[y][x] = new Wall("obstacle", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y, "images/wall_corner_top_left.png");
 
-                    this.roomTiles[y][x] =   new Wall("obstacle", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y);
+                        }else if(x ===this.roomTiles[y].length-1) {
+                            this.roomTiles[y][x] = new Wall("obstacle", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y, "images/wall_corner_top_right.png");
+
+                        }else{
+                            this.roomTiles[y][x] =   new Wall("obstacle", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y, "images/wall_corner_top.png");
+                        }
+
+                    }else if (y === this.roomTiles.length-1) {
+
+                        if(x === 0){
+                            this.roomTiles[y][x] = new Wall("obstacle", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y, "images/wall_corner_bottom_left.png");
+
+                        }else if(x ===this.roomTiles[y].length-1) {
+                            this.roomTiles[y][x] = new Wall("obstacle", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y, "images/wall_corner_bottom_right.png");
+
+                        }else{
+                            this.roomTiles[y][x] =   new Wall("obstacle", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y, "images/wall_corner_bottom.png");
+                        }
+                    }
+
                     this.containedEntites.push(this.roomTiles[y][x]);
 
                 }else if(x === 0 || x === this.roomTiles[y].length-1){
@@ -103,7 +125,14 @@ class Room{
                         }
                     }
 
-                    this.roomTiles[y][x] =   new Wall("obstacle", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y);
+                    if(x === 0){
+                        this.roomTiles[y][x] =   new Wall("obstacle", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y, "images/wall_corner_mid_left.png");
+
+                    }else if (x === this.roomTiles[y].length-1) {
+                        this.roomTiles[y][x] =   new Wall("obstacle", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y, "images/wall_corner_mid_right.png");
+                    }
+
+
                     this.containedEntites.push(this.roomTiles[y][x]);
 
                 }else{

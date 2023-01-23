@@ -9,7 +9,8 @@ class GameManager {
 	static states = {
 		MainMenu : 0,
 		Playing : 1,
-		Pausing : 2
+		Pausing : 2,
+		Dead: 3
 	}
 
 	static gameStates = {
@@ -52,19 +53,6 @@ class GameManager {
 		window.gameManager = this;
 		//TODO make MouseHelper static
 		window.mouseHelper = new MouseHelper();
-
-		this.rooms = LevelGenerator.generateLevel();
-		this.currentRoom = this.rooms.filter(room => room.x_pos === 0 &&  room.y_pos === 0)[0];
-		//this.currentRoom.addEntity(new ShootingEnemy("enemy", 300,300,64,64));
-		//this.currentRoom.addEntity(new Boulder("enemy", 300,300,128,128));
-		/**
-		 *
-		 *        this.currentRoom.addEntity(new Enemy("enemy", 100,200,64,64));
-		 *        this.currentRoom.addEntity(new Enemy("enemy", 400,300,64,64));
-		 */
-		this.currentRoom.setUpWalls();
-		this.currentRoom.visited = true;
-		console.log("gameManager created");
 		this.startTime = undefined;
 		this.framesInRoom = 0;
 		this.catchUpFrames = 10;
@@ -118,6 +106,9 @@ class GameManager {
 				case GameManager.states.Pausing:
 					gameManager.pauseGame();
 					break;
+				case GameManager.states.Dead:
+					gameManager.gameOverHandling();
+					break;
 
 			}
 
@@ -129,7 +120,9 @@ class GameManager {
 
 	displayMenu(){
 		gameManager.removeGarbage();
-		gameManager.currentRoom.removeGarbage();
+		if(gameManager.currentRoom){
+			gameManager.currentRoom.removeGarbage();
+		}
 
 		for (let gameLoopState = 0; gameLoopState < Object.keys(GameManager.menuStates).length; gameLoopState++) {
 
@@ -353,10 +346,6 @@ class GameManager {
 	}
 
 	pauseGame() {
-		//TODO change -> for of loop
-		if(gameManager.framesInRoom < gameManager.catchUpFrames){
-			gameManager.framesInRoom++;
-		}
 
 		gameManager.removeGarbage();
 		gameManager.currentRoom.removeGarbage();
@@ -393,15 +382,71 @@ class GameManager {
 		}
 	}
 
+	gameOverHandling(){
+		gameManager.removeGarbage();
+		gameManager.currentRoom.removeGarbage();
+
+		for (let gameLoopState = 0; gameLoopState < Object.keys(GameManager.pauseStates).length; gameLoopState++) {
+			//console.log(gameManager.framesInRoom)
+			gameManager.gameObjects.forEach((gameObject) => {
+				if (gameObject.isActive) {
+					switch (gameLoopState) {
+
+						case GameManager.pauseStates.mouseEvents:
+							if(gameManager.stopCurrentLoop){
+								break;
+							}
+							mouseHelper.checkObjectMouseEvent(gameObject);
+							break;
+						case GameManager.pauseStates.draw:
+							if(gameManager.stopCurrentLoop){
+								break;
+							}
+							//gameObject.rotate();
+							gameObject.draw();
+							gameObject.debugDraw();
+							//gameObject.restoreCanvas();
+							break;
+					}
+				}
+			});
+			mouseHelper.recentMouseEvent = 0;
+			if(gameLoopState === GameManager.pauseStates.draw){
+				gameManager.stopCurrentLoop = false;
+			}
+		}
+	}
+
 	togglePause(){
 		if(gameManager.currentState === GameManager.states.Pausing){
 			gameManager.currentState = GameManager.states.Playing;
 			gameManager.gameObjects.filter(menu => menu instanceof PauseMenu)[0].disable();
 		}else if(gameManager.currentState === GameManager.states.Playing){
 			gameManager.currentState = GameManager.states.Pausing;
-			new PauseMenu("",gameManager.canvas.canvasBoundaries.right/2-150, gameManager.canvas.canvasBoundaries.bottom/2-200, 300,400, "images/menu_story.png");
+			new PauseMenu("",gameManager.canvas.canvasBoundaries.right/2-150, gameManager.canvas.canvasBoundaries.bottom/2-200, 300,400, "images/menu_pause.png");
 
 		}
 	}
+
+	gameOver(){
+		gameManager.currentState = GameManager.states.Dead;
+		new GameOverMenu("gameOver",gameManager.canvas.canvasBoundaries.right/2-150, gameManager.canvas.canvasBoundaries.bottom/2-200, 300,400, "images/menu_game_over.png");
+	}
+
+	restartGame(){
+		gameManager.rooms = LevelGenerator.generateLevel();
+		gameManager.currentRoom = gameManager.rooms.filter(room => room.x_pos === 0 &&  room.y_pos === 0)[0];
+		gameManager.currentRoom.setUpWalls();
+		gameManager.currentRoom.addEntity(miniMap);
+		gameManager.currentRoom.addEntity(playerUI);
+		gameManager.currentRoom.addEntity(playerStats);
+		gameManager.currentRoom.visited = true;
+		gameManager.framesInRoom = 0;
+		skeleton.resetPlayer();
+		gameManager.setUpRoom();
+		gameManager.currentState = GameManager.states.Playing;
+
+
+	}
+
 }
-	
