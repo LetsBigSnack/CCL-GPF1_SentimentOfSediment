@@ -60,9 +60,11 @@ class Room{
         for (let y = 0; y < this.roomTiles.length; y++){
             for (let x = 0; x < this.roomTiles[y].length; x++){
                 if(y === 0 || y === this.roomTiles.length-1){
+
                     if(y === 0 && (x === 5 || x === 6)){
                         if( this.connectedRooms["n"] ){
                             this.roomTiles[y][x] =   new Door("n", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y);
+                            this.roomTiles[y][x].placement = "top";
                             this.containedEntites.push(this.roomTiles[y][x]);
                             continue;
                         }
@@ -71,6 +73,7 @@ class Room{
                     if(y === this.roomTiles.length-1 && (x === 5 || x === 6)){
                         if( this.connectedRooms["s"]){
                             this.roomTiles[y][x] =   new Door("s", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y);
+                            this.roomTiles[y][x].placement = "bottom";
                             this.containedEntites.push(this.roomTiles[y][x]);
                             continue;
                         }
@@ -85,6 +88,7 @@ class Room{
                     if(x === 0 && (y === 3 || y === 4)){
                         if( this.connectedRooms["w"] ){
                             this.roomTiles[y][x] =   new Door("w", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y);
+                            this.roomTiles[y][x].placement = "left";
                             this.containedEntites.push(this.roomTiles[y][x]);
                             continue;
                         }
@@ -93,6 +97,7 @@ class Room{
                     if(x === this.roomTiles[y].length-1 && (y === 3 || y === 4)){
                         if( this.connectedRooms["e"]){
                             this.roomTiles[y][x] =   new Door("e", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y);
+                            this.roomTiles[y][x].placement = "right";
                             this.containedEntites.push(this.roomTiles[y][x]);
                             continue;
                         }
@@ -145,6 +150,19 @@ class Room{
                      */
 
                 }
+                if(y === 0 && x !== 0 && x !== this.roomTiles[y].length-1){
+                    this.roomTiles[y][x].placement = "top";
+                }else if(y === this.roomTiles.length-1 && x !== 0 && x !== this.roomTiles[y].length-1){
+                    this.roomTiles[y][x].placement = "bottom";
+                }
+
+                if(x === 0 && y !== 0 && y !== this.roomTiles.length-1){
+                    this.roomTiles[y][x].placement = "left";
+                }else if(x === this.roomTiles[y].length-1 && y !== 0 && y !== this.roomTiles.length-1){
+                    this.roomTiles[y][x].placement = "right";
+                }
+
+
             }
         }
         this.alreadyFilled = true;
@@ -171,5 +189,13 @@ class Room{
         if(call){
             room.addConnection(Room.oppositeDirections[directions],this,false);
         }
+    }
+
+    removeGarbage(){
+        let activeGameObjects = this.containedEntites.filter(gameObject => gameObject.isActive);
+        for(let i = 0; i < activeGameObjects.length; i++){
+            activeGameObjects.gameObjectIndex = i;
+        }
+        this.containedEntites = activeGameObjects;
     }
 }

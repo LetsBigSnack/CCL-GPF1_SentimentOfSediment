@@ -12,7 +12,7 @@ class Enemy extends GameObject {
     knockback = false;
     knockbackDirection = "";
     knockbackCurrentFrame = 0;
-    knockbackFrameCountdown = 1;
+    knockbackFrameCountdown = 3;
     knocbackCooldown = true;
 
 

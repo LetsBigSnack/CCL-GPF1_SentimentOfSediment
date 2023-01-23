@@ -5,6 +5,13 @@
  */
 class GameManager {
 
+
+	static states = {
+		MainMenu : 0,
+		Playing : 1,
+		Pausing : 2
+	}
+
 	static gameStates = {
 		storeAndUpdate : 0,
 		collisionCheck : 1,
@@ -14,9 +21,17 @@ class GameManager {
 		mouseEvents :5,
 		draw : 6
 	};
+
+	static menuStates = {
+		update: 0,
+		mouseEvents :1,
+		draw : 2
+	};
 	stopCurrentLoop = false;
 
+	uiElements = [];
 
+	menuElements = [];
 
 	/**
 	 * The class constructor for the class "GameManager"
@@ -35,7 +50,8 @@ class GameManager {
 
 		this.rooms = LevelGenerator.generateLevel();
 		this.currentRoom = this.rooms.filter(room => room.x_pos === 0 &&  room.y_pos === 0)[0];
-		this.currentRoom.addEntity(new ShootingEnemy("enemy", 300,300,64,64));
+		//this.currentRoom.addEntity(new ShootingEnemy("enemy", 300,300,64,64));
+		this.currentRoom.addEntity(new Boulder("enemy", 300,300,128,128));
 		/**
 		 *
 		 *        this.currentRoom.addEntity(new Enemy("enemy", 100,200,64,64));
@@ -47,6 +63,8 @@ class GameManager {
 		this.startTime = undefined;
 		this.framesInRoom = 0;
 		this.catchUpFrames = 10;
+		this.currentState = GameManager.states.MainMenu;
+
 	}
 
 
@@ -68,6 +86,7 @@ class GameManager {
 		 * Look into that
 		 */
 		if(!gameManager.startTime){
+			//gameManager.addGameObject(new ImageObject("Title", 0,0,gameManager.canvas.canvasBoundaries.right,gameManager.canvas.canvasBoundaries.bottom, "images/Title_Screen.png"));
 			gameManager.startTime = performance.now();
 		}
 		//TODO implement Delta Time
@@ -80,97 +99,154 @@ class GameManager {
 
 			document.querySelector("#curTime").innerHTML = gameManager.currentDeltaTime;
 
-			var sinceStart = currentTimeStamp - gameManager.startTime;
-			var currentFps = Math.round(1000 / (sinceStart / ++gameManager.framecount) * 100) / 100;
+			let sinceStart = currentTimeStamp - gameManager.startTime;
+			let currentFps = Math.round(1000 / (sinceStart / ++gameManager.framecount) * 100) / 100;
 			document.querySelector("#fps").innerHTML = currentFps;
 			canvas.clearScreen();
+			switch(gameManager.currentState){
+				case GameManager.states.MainMenu:
+					gameManager.displayMenu();
+					break;
+				case GameManager.states.Playing:
+					gameManager.handleGameLogic();
+					break;
 
-			//TODO change -> for of loop
-			if(gameManager.framesInRoom < gameManager.catchUpFrames){
-				gameManager.framesInRoom++;
-			}
-			for (let gameLoopState = 0; gameLoopState < Object.keys(GameManager.gameStates).length; gameLoopState++) {
-				console.log(gameManager.framesInRoom)
-				gameManager.gameObjects.forEach((gameObject) => {
-					if (gameObject.isActive) {
-						switch (gameLoopState) {
-
-							case GameManager.gameStates.storeAndUpdate:
-								if(gameManager.stopCurrentLoop){
-									break;
-								}
-								gameObject.storePosition();
-								gameObject.update();
-								break;
-
-							case GameManager.gameStates.collisionCheck:
-								if(gameManager.stopCurrentLoop){
-									break;
-								}
-								gameObject.currentGravityCollisionObject = null;
-								gameManager.checkObjectsForCollisions(gameObject);
-								break;
-
-							case GameManager.gameStates.applyGravity:
-								if(gameManager.stopCurrentLoop){
-									break;
-								}
-								if(gameObject.useGravity){
-									GravityHelper.applyGravityForces(gameObject, false);
-								}
-								break;
-
-							case GameManager.gameStates.gravityCollisionCheck:
-								if(gameManager.stopCurrentLoop){
-									break;
-								}
-								gameManager.checkObjectsForGravityCollisions(gameObject);
-								break;
-
-							case GameManager.gameStates.gravityRevert:
-								if(gameManager.stopCurrentLoop){
-									break;
-								}
-								if (gameObject.useGravity) {
-									if (gameObject.currentGravityCollisionObject != null) {
-										GravityHelper.applyGravityForces(gameObject, true);
-										GravityHelper.applyGameObjectToHitPlatform(gameObject);
-									} else {
-										gameObject.isFalling = true;
-									}
-								}
-								break;
-
-							case GameManager.gameStates.mouseEvents:
-								if(gameManager.stopCurrentLoop){
-									break;
-								}
-								mouseHelper.checkObjectMouseEvent(gameObject);
-								break;
-							case GameManager.gameStates.draw:
-								if(gameManager.stopCurrentLoop){
-									break;
-								}
-								//gameObject.rotate();
-								gameObject.draw();
-								gameObject.debugDraw();
-								//gameObject.restoreCanvas();
-								break;
-						}
-					}
-				});
-
-				if(gameLoopState === GameManager.gameStates.draw){
-					gameManager.stopCurrentLoop = false;
-				}
 			}
 
-
-			mouseHelper.recentMouseEvent = 0;
 
 		}
 
 		requestAnimationFrame(gameManager.gameLoop);
+	}
+
+	displayMenu(){
+		gameManager.removeGarbage();
+		gameManager.currentRoom.removeGarbage();
+
+		for (let gameLoopState = 0; gameLoopState < Object.keys(GameManager.menuStates).length; gameLoopState++) {
+
+			gameManager.menuElements.forEach((menuElement) => {
+				if (menuElement.isActive) {
+					switch (gameLoopState) {
+
+						case GameManager.menuStates.update:
+							if(gameManager.stopCurrentLoop){
+								break;
+							}
+							menuElement.update();
+							break;
+
+						case GameManager.menuStates.mouseEvents:
+							if(gameManager.stopCurrentLoop){
+								break;
+							}
+							mouseHelper.checkObjectMouseEvent(menuElement);
+
+							break;
+
+						case GameManager.menuStates.draw:
+							if(gameManager.stopCurrentLoop){
+								break;
+							}
+							menuElement.draw();
+							menuElement.debugDraw();
+							break;
+					}
+				}
+			});
+			if(gameLoopState === GameManager.menuStates.draw){
+				gameManager.stopCurrentLoop = false;
+			}
+		}
+		mouseHelper.recentMouseEvent = 0;
+	}
+
+	handleGameLogic(){
+		//TODO change -> for of loop
+		if(gameManager.framesInRoom < gameManager.catchUpFrames){
+			gameManager.framesInRoom++;
+		}
+
+		gameManager.removeGarbage();
+		gameManager.currentRoom.removeGarbage();
+
+		for (let gameLoopState = 0; gameLoopState < Object.keys(GameManager.gameStates).length; gameLoopState++) {
+			//console.log(gameManager.framesInRoom)
+			gameManager.gameObjects.forEach((gameObject) => {
+				if (gameObject.isActive) {
+					switch (gameLoopState) {
+
+						case GameManager.gameStates.storeAndUpdate:
+							if(gameManager.stopCurrentLoop){
+								break;
+							}
+							gameObject.storePosition();
+							gameObject.update();
+							break;
+
+						case GameManager.gameStates.collisionCheck:
+							if(gameManager.stopCurrentLoop){
+								break;
+							}
+							gameObject.currentGravityCollisionObject = null;
+							gameManager.checkObjectsForCollisions(gameObject);
+							break;
+
+						case GameManager.gameStates.applyGravity:
+							if(gameManager.stopCurrentLoop){
+								break;
+							}
+							if(gameObject.useGravity){
+								GravityHelper.applyGravityForces(gameObject, false);
+							}
+							break;
+
+						case GameManager.gameStates.gravityCollisionCheck:
+							if(gameManager.stopCurrentLoop){
+								break;
+							}
+							gameManager.checkObjectsForGravityCollisions(gameObject);
+							break;
+
+						case GameManager.gameStates.gravityRevert:
+							if(gameManager.stopCurrentLoop){
+								break;
+							}
+							if (gameObject.useGravity) {
+								if (gameObject.currentGravityCollisionObject != null) {
+									GravityHelper.applyGravityForces(gameObject, true);
+									GravityHelper.applyGameObjectToHitPlatform(gameObject);
+								} else {
+									gameObject.isFalling = true;
+								}
+							}
+							break;
+
+						case GameManager.gameStates.mouseEvents:
+							if(gameManager.stopCurrentLoop){
+								break;
+							}
+							mouseHelper.checkObjectMouseEvent(gameObject);
+							mouseHelper.recentMouseEvent = 0;
+							break;
+						case GameManager.gameStates.draw:
+							if(gameManager.stopCurrentLoop){
+								break;
+							}
+							//gameObject.rotate();
+							gameObject.draw();
+							gameObject.debugDraw();
+							//gameObject.restoreCanvas();
+							break;
+					}
+				}
+			});
+			mouseHelper.recentMouseEvent = 0;
+			if(gameLoopState === GameManager.gameStates.draw){
+				gameManager.stopCurrentLoop = false;
+			}
+		}
+
 	}
 
 	/**
@@ -258,6 +334,14 @@ class GameManager {
 		gameManager.clearGameObjects();
 		gameManager.currentRoom.addEntity(skeleton);
 		gameManager.currentRoom.addEntityToObject(this);
+	}
+
+	removeGarbage(){
+		let activeGameObjects = gameManager.gameObjects.filter(gameObject => gameObject.isActive);
+		for(let i = 0; i < activeGameObjects.length; i++){
+			activeGameObjects.gameObjectIndex = i;
+		}
+		gameManager.gameObjects = activeGameObjects;
 	}
 }
 	

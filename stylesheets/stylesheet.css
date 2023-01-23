@@ -1,3 +1,8 @@
+@font-face {
+    font-family: 'Pixel';
+    src: url("../fonts/pixhobo.ttf");
+}
+
 .gameElement {
     position: absolute;
     top: 0;
@@ -21,4 +26,8 @@
     font-size: 2rem;
     font-weight: bold;
     color: white;
+}
+
+#info {
+    pointer-events: none;
 }
