@@ -1,11 +1,18 @@
-class MenuButton extends ImageObject {
+class ConfirmButton extends ImageObject {
 
     color = "green";
+
+    constructor(name, x, y, width, height, src, parent) {
+        super(name, x, y, width, height, src);
+        this.parent = parent;
+
+    }
 
     update() {
         super.update();
         this.color = "#35a050";
     }
+
 
     draw() {
         gameManager.canvas.drawLayer.textAlign = "center";
@@ -22,30 +29,19 @@ class MenuButton extends ImageObject {
         gameManager.canvas.drawLayer.textAlign = "start";
     }
 
-    static buttonNames = {
-        Play: "Play",
-        Story: "Story",
-        HTP: "How to Play",
-        Credits : "Credits"
-    }
-    onMouseEvent(mouseEvent) {
-        //console.log("Mouse Event on: ", this.name, " - " ,mouseEvent);
-        if(mouseEvent === MouseHelper.mouseEventCodes.LeftClick){
-            switch (this.name) {
-                case MenuButton.buttonNames.Play:
-                    gameManager.currentState = GameManager.states.Playing;
-                    break;
-                case MenuButton.buttonNames.Story:
-                    new InfoPanel("",gameManager.canvas.canvasBoundaries.right/2-150, gameManager.canvas.canvasBoundaries.bottom/2-200, 300,400, "images/menu_story.png");
-                    break;
-                case MenuButton.buttonNames.HTP:
-                    new InfoPanel("",gameManager.canvas.canvasBoundaries.right/2-150, gameManager.canvas.canvasBoundaries.bottom/2-200, 300,400, "images/menu_htp.png");
-                    break;
-                case MenuButton.buttonNames.Credits:
-                    new InfoPanel("",gameManager.canvas.canvasBoundaries.right/2-150, gameManager.canvas.canvasBoundaries.bottom/2-200, 300,400, "images/menu_credits.png");
-                    break;
 
+    onMouseEvent(mouseEvent) {
+        this.update();
+        console.log("Mouse Event on: ", this.name, " - " ,mouseEvent);
+        if(mouseEvent === MouseHelper.mouseEventCodes.LeftClick){
+            this.isActive = false;
+            this.parent.isActive = false;
+            this.parent.confirmButton.isActive = false;
+
+            if(this.parent instanceof PauseMenu){
+                gameManager.togglePause();
             }
+
         }
         if(mouseEvent === MouseHelper.mouseEventCodes.Hover){
             this.color = "#1d7533";

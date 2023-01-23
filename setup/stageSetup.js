@@ -26,10 +26,10 @@ gameManager.currentRoom.addEntity(playerUI);
 gameManager.currentRoom.addEntity(playerStats);
 
 gameManager.menuElements.push(new MainMenu("Title", 0,0,gameManager.canvas.canvasBoundaries.right,gameManager.canvas.canvasBoundaries.bottom, "images/Title_Screen.png"));
-gameManager.menuElements.push(new MenuButton("Play", 47,198,320-47, 265-198));
-gameManager.menuElements.push(new MenuButton("Story", 47,270,320-47, 265-198));
-gameManager.menuElements.push(new MenuButton("How to play", 47,342,320-47, 265-198));
-gameManager.menuElements.push(new MenuButton("Credits", 47,413,320-47, 265-198));
+gameManager.menuElements.push(new MenuButton(MenuButton.buttonNames.Play, 47,198,320-47, 265-198));
+gameManager.menuElements.push(new MenuButton(MenuButton.buttonNames.Story, 47,270,320-47, 265-198));
+gameManager.menuElements.push(new MenuButton(MenuButton.buttonNames.HTP, 47,342,320-47, 265-198));
+gameManager.menuElements.push(new MenuButton(MenuButton.buttonNames.Credits, 47,413,320-47, 265-198));
 gameManager.setUpRoom();
 let startTime = performance.now();
 

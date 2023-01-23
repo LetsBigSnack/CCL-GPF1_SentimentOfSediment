@@ -56,7 +56,7 @@ class Room{
 
     setUpWalls(){
         let itemRockSpawned = false;
-
+        let bossSpawned = false;
         for (let y = 0; y < this.roomTiles.length; y++){
             for (let x = 0; x < this.roomTiles[y].length; x++){
                 if(y === 0 || y === this.roomTiles.length-1){
@@ -124,13 +124,19 @@ class Room{
                             let chance = 0.75;
 
                             if(this.type === Room.roomTypes.Boss){
-                                chance = 0.35;
+                                if(!bossSpawned){
+                                    this.roomTiles[y][x] = new Boulder("enemy", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x*2, this.tileDimensions.y*2)
+                                    this.containedEntites.push(this.roomTiles[y][x]);
+                                    bossSpawned = true;
+                                }
+                            }else{
+                                if(rng > chance){
+                                    this.roomTiles[y][x] = new Enemy("enemy", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y)
+                                    this.containedEntites.push(this.roomTiles[y][x]);
+                                }
                             }
-                            if(rng > chance){
 
-                                this.roomTiles[y][x] = new Enemy("enemy", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y)
-                                this.containedEntites.push(this.roomTiles[y][x]);
-                            }
+
                         }
 
                     }

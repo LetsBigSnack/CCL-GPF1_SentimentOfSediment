@@ -27,6 +27,11 @@ class GameManager {
 		mouseEvents :1,
 		draw : 2
 	};
+
+	static pauseStates = {
+		mouseEvents :0,
+		draw : 1
+	};
 	stopCurrentLoop = false;
 
 	uiElements = [];
@@ -51,7 +56,7 @@ class GameManager {
 		this.rooms = LevelGenerator.generateLevel();
 		this.currentRoom = this.rooms.filter(room => room.x_pos === 0 &&  room.y_pos === 0)[0];
 		//this.currentRoom.addEntity(new ShootingEnemy("enemy", 300,300,64,64));
-		this.currentRoom.addEntity(new Boulder("enemy", 300,300,128,128));
+		//this.currentRoom.addEntity(new Boulder("enemy", 300,300,128,128));
 		/**
 		 *
 		 *        this.currentRoom.addEntity(new Enemy("enemy", 100,200,64,64));
@@ -109,6 +114,9 @@ class GameManager {
 					break;
 				case GameManager.states.Playing:
 					gameManager.handleGameLogic();
+					break;
+				case GameManager.states.Pausing:
+					gameManager.pauseGame();
 					break;
 
 			}
@@ -342,6 +350,58 @@ class GameManager {
 			activeGameObjects.gameObjectIndex = i;
 		}
 		gameManager.gameObjects = activeGameObjects;
+	}
+
+	pauseGame() {
+		//TODO change -> for of loop
+		if(gameManager.framesInRoom < gameManager.catchUpFrames){
+			gameManager.framesInRoom++;
+		}
+
+		gameManager.removeGarbage();
+		gameManager.currentRoom.removeGarbage();
+
+		for (let gameLoopState = 0; gameLoopState < Object.keys(GameManager.pauseStates).length; gameLoopState++) {
+			//console.log(gameManager.framesInRoom)
+			gameManager.gameObjects.forEach((gameObject) => {
+				if (gameObject.isActive) {
+					switch (gameLoopState) {
+
+						case GameManager.pauseStates.mouseEvents:
+							if(gameManager.stopCurrentLoop){
+								break;
+							}
+							mouseHelper.checkObjectMouseEvent(gameObject);
+							break;
+						case GameManager.pauseStates.draw:
+							if(gameManager.stopCurrentLoop){
+								break;
+							}
+							//gameObject.rotate();
+							gameObject.draw();
+							gameObject.debugDraw();
+							//gameObject.restoreCanvas();
+							break;
+					}
+				}
+			});
+			mouseHelper.recentMouseEvent = 0;
+			if(gameLoopState === GameManager.pauseStates.draw){
+				gameManager.stopCurrentLoop = false;
+			}
+
+		}
+	}
+
+	togglePause(){
+		if(gameManager.currentState === GameManager.states.Pausing){
+			gameManager.currentState = GameManager.states.Playing;
+			gameManager.gameObjects.filter(menu => menu instanceof PauseMenu)[0].disable();
+		}else if(gameManager.currentState === GameManager.states.Playing){
+			gameManager.currentState = GameManager.states.Pausing;
+			new PauseMenu("",gameManager.canvas.canvasBoundaries.right/2-150, gameManager.canvas.canvasBoundaries.bottom/2-200, 300,400, "images/menu_story.png");
+
+		}
 	}
 }
 	

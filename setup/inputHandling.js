@@ -47,6 +47,14 @@ function keyDown(eventInformation) {
 			console.log("PlayerPunch Down");
 			skeleton.bomb = true;
 			break;
+		case "Escape":
+			gameManager.togglePause();
+			break;
+		case "o":
+			// Down pressed
+			console.log("play");
+			gameManager.currentState = GameManager.states.Playing;
+			break;
 	}
 }
 window.addEventListener("keydown", keyDown);
@@ -74,6 +82,8 @@ function keyUp(eventInformation) {
 		skeleton.moveBy.left = skeleton.moveVelocity;
 		skeleton.setCurrentAnimationByName("walk_right");
 	}
+
+
 
 	let isKeyPressed = false;
 
