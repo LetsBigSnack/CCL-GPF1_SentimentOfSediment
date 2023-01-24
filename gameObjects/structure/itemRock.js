@@ -1,18 +1,8 @@
 class ItemRock extends Rock {
 
-    constructor(name, x, y, width, height) {
-        super(name, x, y, width, height);
+    constructor(name, x, y, width, height, src) {
+        super(name, x, y, width, height, src);
         this.createdItem = false;
-    }
-
-    draw() {
-        gameManager.canvas.drawLayer.beginPath();
-        gameManager.canvas.drawLayer.fillStyle = "#cccccc";
-        gameManager.canvas.drawLayer.strokeStyle = "#000000";
-        gameManager.canvas.drawLayer.rect(this.position.x, this.position.y, this.dimensions.width, this.dimensions.height);
-        gameManager.canvas.drawLayer.fill();
-        gameManager.canvas.drawLayer.stroke();
-        gameManager.canvas.drawLayer.closePath();
     }
 
     onCollision(otherObject) {
@@ -23,22 +13,22 @@ class ItemRock extends Rock {
 
             switch (this.name){
                 case "amethyst":
-                    item = new Amethyst("amethyst", this.position.x, this.position.y, this.dimensions.width, this.dimensions.height);
+                    item = new Amethyst("amethyst", this.position.x+this.dimensions.width/4, this.position.y+this.dimensions.height/4, this.dimensions.width/2, this.dimensions.height/2, "images/powerups/ame.png");
                     break;
                 case "granite":
-                    item = new Granite("granite", this.position.x, this.position.y, this.dimensions.width, this.dimensions.height);
+                    item = new Granite("granite", this.position.x+this.dimensions.width/4, this.position.y+this.dimensions.height/4, this.dimensions.width/2, this.dimensions.height/2,"images/powerups/granite.png");
                     break;
                 case "limestone":
-                    item = new Limestone("limestone", this.position.x, this.position.y, this.dimensions.width, this.dimensions.height);
+                    item = new Limestone("limestone", this.position.x+this.dimensions.width/4, this.position.y+this.dimensions.height/4, this.dimensions.width/2, this.dimensions.height/2,"images/powerups/limestone.png");
                     break;
                 case "obsidian":
-                    item = new Obsidian("obsidian", this.position.x, this.position.y, this.dimensions.width, this.dimensions.height);
+                    item = new Obsidian("obsidian", this.position.x+this.dimensions.width/4, this.position.y+this.dimensions.height/4, this.dimensions.width/2, this.dimensions.height/2,"images/powerups/obsidian.png");
                     break;
                 case "quartz":
-                    item = new Quartz("quartz", this.position.x, this.position.y, this.dimensions.width, this.dimensions.height);
+                    item = new Quartz("quartz", this.position.x+this.dimensions.width/4, this.position.y+this.dimensions.height/4, this.dimensions.width/2, this.dimensions.height/2,"images/powerups/quartz.png");
                     break;
                 case "ruby":
-                    item = new Ruby("ruby", this.position.x, this.position.y, this.dimensions.width, this.dimensions.height);
+                    item = new Ruby("ruby", this.position.x+this.dimensions.width/4, this.position.y+this.dimensions.height/4, this.dimensions.width/2, this.dimensions.height/2, "images/powerups/ruby.png");
                     break;
             }
             //item = new HealItem("powerUp", this.position.x, this.position.y, this.dimensions.width, this.dimensions.height);

@@ -63,7 +63,13 @@ class Room{
 
                     if(y === 0 && (x === 5 || x === 6)){
                         if( this.connectedRooms["n"] ){
-                            this.roomTiles[y][x] =   new Door("n", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y);
+                            if(x === 5){
+                                this.roomTiles[y][x] =   new Door("n", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y, "images/wall_door_top_open_left.png", "images/wall_door_top_closed_left.png");
+
+                            }else{
+                                this.roomTiles[y][x] =   new Door("n", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y, "images/wall_door_top_open_right.png", "images/wall_door_top_closed_right.png");
+
+                            }
                             this.roomTiles[y][x].placement = "top";
                             this.containedEntites.push(this.roomTiles[y][x]);
                             continue;
@@ -72,7 +78,14 @@ class Room{
 
                     if(y === this.roomTiles.length-1 && (x === 5 || x === 6)){
                         if( this.connectedRooms["s"]){
-                            this.roomTiles[y][x] =   new Door("s", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y);
+
+                            if(x === 5){
+                                this.roomTiles[y][x] =   new Door("s", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y, "images/wall_door_bottom_open_left.png", "images/wall_door_bottom_closed_left.png");
+
+                            }else{
+                                this.roomTiles[y][x] =   new Door("s", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y, "images/wall_door_bottom_open_right.png", "images/wall_door_bottom_closed_right.png");
+
+                            }
                             this.roomTiles[y][x].placement = "bottom";
                             this.containedEntites.push(this.roomTiles[y][x]);
                             continue;
@@ -80,25 +93,25 @@ class Room{
                     }
                     if(y === 0){
                         if(x === 0){
-                            this.roomTiles[y][x] = new Wall("obstacle", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y, "images/wall_corner_top_left.png");
+                            this.roomTiles[y][x] = new Wall("obstacle", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y, "images/wall_top_left.png");
 
                         }else if(x ===this.roomTiles[y].length-1) {
-                            this.roomTiles[y][x] = new Wall("obstacle", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y, "images/wall_corner_top_right.png");
+                            this.roomTiles[y][x] = new Wall("obstacle", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y, "images/wall_top_right.png");
 
                         }else{
-                            this.roomTiles[y][x] =   new Wall("obstacle", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y, "images/wall_corner_top.png");
+                            this.roomTiles[y][x] =   new Wall("obstacle", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y, "images/wall_top_"+ Math.floor(Math.random() * 3) +".png");
                         }
 
                     }else if (y === this.roomTiles.length-1) {
 
                         if(x === 0){
-                            this.roomTiles[y][x] = new Wall("obstacle", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y, "images/wall_corner_bottom_left.png");
+                            this.roomTiles[y][x] = new Wall("obstacle", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y, "images/wall_bottom_left.png");
 
                         }else if(x ===this.roomTiles[y].length-1) {
-                            this.roomTiles[y][x] = new Wall("obstacle", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y, "images/wall_corner_bottom_right.png");
+                            this.roomTiles[y][x] = new Wall("obstacle", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y, "images/wall_bottom_right.png");
 
                         }else{
-                            this.roomTiles[y][x] =   new Wall("obstacle", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y, "images/wall_corner_bottom.png");
+                            this.roomTiles[y][x] =   new Wall("obstacle", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y, "images/wall_bottom_"+ Math.floor(Math.random() * 3) +".png");
                         }
                     }
 
@@ -108,9 +121,17 @@ class Room{
 
 
                     if(x === 0 && (y === 3 || y === 4)){
+
                         if( this.connectedRooms["w"] ){
-                            this.roomTiles[y][x] =   new Door("w", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y);
-                            this.roomTiles[y][x].placement = "left";
+
+                            if(y === 3){
+                                this.roomTiles[y][x] =   new Door("w", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y,"images/wall_door_left_open_up.png", "images/wall_door_left_closed_up.png");
+
+                            }else{
+                                this.roomTiles[y][x] =   new Door("w", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y,"images/wall_door_left_open_down.png", "images/wall_door_left_closed_down.png");
+
+                            }
+                             this.roomTiles[y][x].placement = "left";
                             this.containedEntites.push(this.roomTiles[y][x]);
                             continue;
                         }
@@ -118,18 +139,25 @@ class Room{
 
                     if(x === this.roomTiles[y].length-1 && (y === 3 || y === 4)){
                         if( this.connectedRooms["e"]){
-                            this.roomTiles[y][x] =   new Door("e", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y);
-                            this.roomTiles[y][x].placement = "right";
+
+                            if(y === 3){
+                                this.roomTiles[y][x] =   new Door("e", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y,"images/wall_door_right_open_up.png", "images/wall_door_right_closed_up.png");
+
+                            }else{
+                                this.roomTiles[y][x] =   new Door("e", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y,"images/wall_door_right_open_down.png", "images/wall_door_right_closed_down.png");
+
+                            }
+                             this.roomTiles[y][x].placement = "right";
                             this.containedEntites.push(this.roomTiles[y][x]);
                             continue;
                         }
                     }
 
                     if(x === 0){
-                        this.roomTiles[y][x] =   new Wall("obstacle", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y, "images/wall_corner_mid_left.png");
+                        this.roomTiles[y][x] =   new Wall("obstacle", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y, "images/wall_left_"+ Math.floor(Math.random() * 3) +".png");
 
                     }else if (x === this.roomTiles[y].length-1) {
-                        this.roomTiles[y][x] =   new Wall("obstacle", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y, "images/wall_corner_mid_right.png");
+                        this.roomTiles[y][x] =   new Wall("obstacle", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y, "images/wall_right_"+ Math.floor(Math.random() * 3) +".png");
                     }
 
 
@@ -140,7 +168,8 @@ class Room{
                     if(this.type === Room.roomTypes.Item && !itemRockSpawned && y > 4 && y < 6 && x > 3 && x < 10 ){
                         let rng = Math.random();
                         if(rng > 0.5){
-                            this.roomTiles[y][x] = new ItemRock(PickUp.RockTypes[Math.floor(Math.random()*PickUp.RockTypes.length)], x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y)
+                            let rockChoice = PickUp.RockTypes[Math.floor(Math.random()*PickUp.RockTypes.length)];
+                            this.roomTiles[y][x] = new ItemRock(rockChoice, x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y, PickUp.RockTypesImages[rockChoice]);
                             this.containedEntites.push(this.roomTiles[y][x]);
                             itemRockSpawned = true;
                         }

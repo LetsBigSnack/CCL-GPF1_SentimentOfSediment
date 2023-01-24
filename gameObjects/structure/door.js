@@ -1,9 +1,15 @@
-class Door extends Obstacle {
+class Door extends ImageObject {
 
     opend = false;
-    constructor(name, x, y, width, height) {
-        super(name, x, y, width, height);
+
+    constructor(name, x, y, width, height,src, srcClosed) {
+        super(name, x, y, width, height, src);
         this.isRigid = true;
+        this.imageClosed = new Image();
+        this.imageClosed.src = srcClosed;
+        this.imageClosed.addEventListener("load", () => {
+            this.isLoaded = true;
+        });
 
     }
 
@@ -34,14 +40,12 @@ class Door extends Obstacle {
         this.setBoundaryOffsets(0,0,0,0);
         gameManager.canvas.drawLayer.beginPath();
         if(this.opend){
-            gameManager.canvas.drawLayer.fillStyle = "yellow";
+            gameManager.canvas.drawLayer.drawImage(this.image, this.currentSourceX, this.currentSourceY, this.dimensions.width, this.dimensions.height, this.position.x, this.position.y, this.dimensions.width, this.dimensions.height);
+
         }else{
-            gameManager.canvas.drawLayer.fillStyle = "orange";
+            gameManager.canvas.drawLayer.drawImage(this.imageClosed, this.currentSourceX, this.currentSourceY, this.dimensions.width, this.dimensions.height, this.position.x, this.position.y, this.dimensions.width, this.dimensions.height);
+
         }
-        gameManager.canvas.drawLayer.strokeStyle = "#000000";
-        gameManager.canvas.drawLayer.rect(this.position.x, this.position.y, this.dimensions.width, this.dimensions.height);
-        gameManager.canvas.drawLayer.fill();
-        gameManager.canvas.drawLayer.stroke();
         gameManager.canvas.drawLayer.closePath();
     }
 

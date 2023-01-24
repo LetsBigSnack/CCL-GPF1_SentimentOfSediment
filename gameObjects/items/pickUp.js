@@ -1,4 +1,4 @@
-class PickUp extends GameObject{
+class PickUp extends ImageObject{
 
     static RockTypes = [
         "amethyst",
@@ -9,18 +9,20 @@ class PickUp extends GameObject{
         "ruby"
     ];
 
+    static RockTypesImages = {
+        amethyst : "images/powerups/rock_ame.png",
+        granite : "images/powerups/rock_granite.png",
+        limestone: "images/powerups/rock_limestone.png",
+        obsidian: "images/powerups/rock_obsidian.png",
+        quartz: "images/powerups/rock_quartz.png",
+        ruby : "images/powerups/rock_ruby.png"
+    };
 
-    constructor(name, x, y, width, height) {
-        super(name, x, y, width, height);
+
+    constructor(name, x, y, width, height,src="images/powerups/rock_ame.png") {
+        super(name, x, y, width, height,src);
     }
 
-    draw() {
-        gameManager.canvas.drawLayer.beginPath();
-        gameManager.canvas.drawLayer.fillStyle = "purple";
-        gameManager.canvas.drawLayer.rect(this.position.x, this.position.y, this.dimensions.width, this.dimensions.height);
-        gameManager.canvas.drawLayer.fill();
-        gameManager.canvas.drawLayer.closePath();
-    }
 
     onCollision(otherObject) {
         if(otherObject.name == "player") {
