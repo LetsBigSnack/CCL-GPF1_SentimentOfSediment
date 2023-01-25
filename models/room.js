@@ -183,13 +183,34 @@ class Room{
 
                             if(this.type === Room.roomTypes.Boss){
                                 if(!bossSpawned){
-                                    this.roomTiles[y][x] = new Boulder("enemy", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x*2, this.tileDimensions.y*2)
-                                    this.containedEntites.push(this.roomTiles[y][x]);
+                                    this.roomTiles[y][x] = new Boulder("enemy", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x*2, this.tileDimensions.y*2 ,"images/enemies/boss-Sheet.png")
+                                    this.roomTiles[y][x].addAnimationInformation("idle", 0, 11);
+                                    this.roomTiles[y][x].addAnimationInformation("chargeUp_1", 12, 15);
+                                    this.roomTiles[y][x].addAnimationInformation("chargeUp_2", 18, 21);
+                                    this.roomTiles[y][x].addAnimationInformation("attack", 17, 17);
+                                    this.roomTiles[y][x].setCurrentAnimationByName("idle");
+                                    this.roomTiles[y][x].setBoundaryOffsets(0,0,15,-15);
                                     bossSpawned = true;
+                                    this.containedEntites.push(this.roomTiles[y][x]);
                                 }
                             }else{
                                 if(rng > chance){
-                                    this.roomTiles[y][x] = new Enemy("enemy", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y)
+
+                                    let rng_Enemy = Math.random();
+
+                                    if(rng_Enemy < 0.75){
+                                        this.roomTiles[y][x] = new Enemy("enemy", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y ,"images/enemies/enemy_2-Sheet.png")
+                                        this.roomTiles[y][x].addAnimationInformation("walk", 0, 7);
+                                        this.roomTiles[y][x].setCurrentAnimationByName("walk");
+                                        this.roomTiles[y][x].setBoundaryOffsets(15,-15,10,-5);
+                                    }else{
+                                        this.roomTiles[y][x] = new ShootingEnemy("enemy", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x, this.tileDimensions.y ,"images/enemies/enemy_1-Sheet.png")
+                                        this.roomTiles[y][x].addAnimationInformation("walk", 0, 3);
+                                        this.roomTiles[y][x].setCurrentAnimationByName("walk");
+                                        this.roomTiles[y][x].setBoundaryOffsets(15,-15,10,-5);
+                                    }
+
+
                                     this.containedEntites.push(this.roomTiles[y][x]);
                                 }
                             }

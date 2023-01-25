@@ -1,4 +1,4 @@
-class Bullet extends GameObject {
+class Bullet extends Enemy {
 
     moveBy = {
         "x": 1,
@@ -24,7 +24,7 @@ class Bullet extends GameObject {
 
     draw() {
         gameManager.canvas.drawLayer.beginPath();
-        gameManager.canvas.drawLayer.fillStyle = "lightblue";
+        gameManager.canvas.drawLayer.fillStyle = "purple";
         gameManager.canvas.drawLayer.strokeStyle = "#000000";
         gameManager.canvas.drawLayer.rect(this.position.x, this.position.y, this.dimensions.width, this.dimensions.height);
         gameManager.canvas.drawLayer.fill();

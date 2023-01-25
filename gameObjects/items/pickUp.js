@@ -21,6 +21,22 @@ class PickUp extends ImageObject{
 
     constructor(name, x, y, width, height,src="images/powerups/rock_ame.png") {
         super(name, x, y, width, height,src);
+
+        this.healthImage = new Image();
+        this.healthImageLoaded = false;
+        this.healthImage.src = "images/UI/health.png";
+        this.healthImage.addEventListener("load", () => {
+            this.healthImageLoaded = true;
+        });
+
+
+        this.bombImage = new Image();
+        this.bombImageLoaded = false;
+        this.bombImage.src = "images/UI/dynamite.png";
+        this.bombImage.addEventListener("load", () => {
+            this.bombImageLoaded = true;
+        });
+
     }
 
 
@@ -33,7 +49,13 @@ class PickUp extends ImageObject{
     }
 
     effectOnPickUp(otherObject){
+        if(gameManager.playSound){
 
+            let pickUpSound = new Audio("Sounds/PM_RI_Source_53 Rocks Impact Hit Single Stone.wav");
+            pickUpSound.volume = 0.3;
+            pickUpSound.play();
+            console.log("pick up");
+        }
     }
 
 }

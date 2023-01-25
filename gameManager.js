@@ -39,6 +39,9 @@ class GameManager {
 
 	menuElements = [];
 
+	playMusic = false;
+	playSound = false;
+
 	/**
 	 * The class constructor for the class "GameManager"
 	 */
@@ -68,6 +71,29 @@ class GameManager {
 	 */
 	gameLoop() {
 
+		if(canPlaySound && changedSound){
+
+			if(gameManager.playMusic){
+				music.play();
+			}else{
+				music.pause();
+				music.currentTime = 0;
+			}
+
+			if(gameManager.playSound){
+				caveAmbiance.play();
+				caveAmbiance2.play();
+				caveAmbiance3.play();
+			}else{
+				caveAmbiance.pause();
+				caveAmbiance.currentTime = 0;
+				caveAmbiance2.pause();
+				caveAmbiance2.currentTime = 0;
+				caveAmbiance3.pause();
+				caveAmbiance3.currentTime = 0;
+			}
+			changedSound = false
+		}
 		/**
 		 * The first thing I noticed was that performance.now() is 4 times slower than Date.now() (400k operations vs 100k on my computer).
 		 * However, if you want accurate timing/time since page load, using performance.now() is the better option.
@@ -447,6 +473,17 @@ class GameManager {
 		gameManager.currentState = GameManager.states.Playing;
 
 
+	}
+
+	toggleMusic(){
+
+		gameManager.playMusic = !gameManager.playMusic;
+		changedSound = true;
+	}
+
+	toggleSound(){
+		gameManager.playSound = !gameManager.playSound;
+		changedSound = true;
 	}
 
 }

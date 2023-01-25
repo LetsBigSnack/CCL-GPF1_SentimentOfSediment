@@ -5,12 +5,17 @@ class ShootingEnemy extends Enemy {
 
     shootingRange = 250;
 
-    speed = 1.5;
+    speed = 2;
 
     update() {
         if(gameManager.framesInRoom >= gameManager.catchUpFrames){
-            if(this.health <= 0){
-
+            if(this.health <= 0) {
+                if (gameManager.playSound) {
+                    let deathSound = new Audio("Sounds/Hit Rock Debris_RBD 02.wav");
+                    deathSound.volume = 0.2;
+                    deathSound.play();
+                    console.log("ddassdada");
+                }
                 this.isActive = false;
                 this.spawnItem();
             }else{
@@ -24,6 +29,8 @@ class ShootingEnemy extends Enemy {
 
             this.position.x += this.moveBy.x * this.speed;
             this.position.y += this.moveBy.y * this.speed;
+            this.position.x = Math.round(this.position.x);
+            this.position.y = Math.round(this.position.y);
 
         }
     }
@@ -37,6 +44,8 @@ class ShootingEnemy extends Enemy {
 
         let directionX = divX / hypotenuse;
         let directionY = divY / hypotenuse;
+
+        console.log(directionX,directionY);
 
         if(!this.knockback){
             if(hypotenuse <= this.shootingRange){

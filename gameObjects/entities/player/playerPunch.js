@@ -1,13 +1,17 @@
 
-class PlayerPunch extends GameObject {
+class PlayerPunch extends ImageObject {
 
 
-    constructor(name, x, y, width, height, offSetX, offSetY, direction) {
-        super(name, x, y, width, height);
+    constructor(name, x, y, width, height, offSetX, offSetY, direction,src) {
+        super(name, x, y, width, height, src);
         this.offSetX = offSetX;
         this.offSetY = offSetY;
         this.direction = direction;
-
+        if(gameManager.playSound){
+            let punchSound = new Audio("Sounds/IMPACT_LOW_THUD_10.wav");
+            punchSound.volume = 0.2;
+            punchSound.play();
+        }
     }
 
     update() {
@@ -17,11 +21,7 @@ class PlayerPunch extends GameObject {
 
     draw() {
         gameManager.canvas.drawLayer.beginPath();
-        gameManager.canvas.drawLayer.fillStyle = "purple";
-        gameManager.canvas.drawLayer.strokeStyle = "#000000";
-        gameManager.canvas.drawLayer.rect(this.position.x, this.position.y, this.dimensions.width, this.dimensions.height);
-        gameManager.canvas.drawLayer.fill();
-        gameManager.canvas.drawLayer.stroke();
+        gameManager.canvas.drawLayer.drawImage(this.image,this.position.x, this.position.y, this.dimensions.width, this.dimensions.height);
         gameManager.canvas.drawLayer.closePath();
     }
 

@@ -34,6 +34,23 @@ class PlayerFigure extends ImageObject {
 
     maxInvincibilityFrameCooldown = 60;
 
+    static playerStates = {
+        Idle_Front: "idel_front",
+        Idle_Left: "idel_front",
+        Idle_Right: "idel_front",
+        Idle_Bottom: "idel_front",
+        Run_Front: "idel_front",
+        Run_Left: "idel_front",
+        Run_Right: "idel_front",
+        Run_Bottom: "idel_front",
+        Punch_Front: "idel_front",
+        Punch_Left: "idel_front",
+        Punch_Right: "idel_front",
+        Punch_Bottom: "idel_front",
+    };
+
+    currentState = PlayerFigure.playerStates.Idle_Front;
+
 
     constructor(name, x, y, width, height, src) {
         super(name, x, y, width, height, src);
@@ -43,14 +60,22 @@ class PlayerFigure extends ImageObject {
     }
 
     update() {
+
         if(this.health <= 0){
             this.health = 0;
             this.isActive = false;
+            if(gameManager.playSound){
+                let deathSound = new Audio("Sounds/Hit Rock Debris_RBD 02.wav");
+                deathSound.volume = 0.2;
+                deathSound.play();
+            }
             gameManager.gameOver();
         }
         this.checkInvicibility();
         this.position.x += this.moveBy.left;
         this.position.y += this.moveBy.top;
+        this.position.x = Math.round(this.position.x);
+        this.position.y = Math.round(this.position.y);
         if(this.punch){
             this.spawnPunch(this.punch);
         }
@@ -60,7 +85,53 @@ class PlayerFigure extends ImageObject {
         }
         this.checkWorldPostion();
     }
-    
+
+    switchState(stateName){
+        if(stateName !== this.currentState){
+            this.currentState = stateName;
+
+            switch (stateName){
+
+                case PlayerFigure.playerStates.Idle_Front:
+
+                    break;
+                case PlayerFigure.playerStates.Idle_Left:
+
+                    break;
+                case PlayerFigure.playerStates.Idle_Right:
+
+                    break;
+                case PlayerFigure.playerStates.Idle_Bottom:
+
+                    break;
+                case PlayerFigure.playerStates.Run_Front:
+
+                    break;
+                case PlayerFigure.playerStates.Run_Left:
+
+                    break;
+                case PlayerFigure.playerStates.Run_Right:
+
+                    break;
+                case PlayerFigure.playerStates.Run_Bottom:
+
+                    break;
+                case PlayerFigure.playerStates.Punch_Front:
+
+                    break;
+                case PlayerFigure.playerStates.Punch_Left:
+
+                    break;
+                case PlayerFigure.playerStates.Punch_Right:
+
+                    break;
+                case PlayerFigure.playerStates.Punch_Bottom:
+
+                    break;
+            }
+        }
+    }
+
     checkWorldPostion() {
         if (this.boundaries.getBottomBoundary() <= gameManager.canvas.canvasBoundaries.top) {
             this.position.y = gameManager.canvas.canvasBoundaries.bottom;
@@ -94,7 +165,7 @@ class PlayerFigure extends ImageObject {
             let punchObject
             switch (punch){
                 case "left":
-                    punchObject = new PlayerPunch("punch", this.position.x-32, this.position.y,64,64, -64, 0, "left");
+                    punchObject = new PlayerPunch("punch", this.position.x-32, this.position.y,64,64, -64, 0, "left" ,"images/punch_left.png");
                     gameManager.addGameObject(punchObject);
 
                     setTimeout(() => {
@@ -103,7 +174,7 @@ class PlayerFigure extends ImageObject {
 
                     break;
                 case "right":
-                    punchObject = new PlayerPunch("punch", this.position.x+this.dimensions.width-32, this.position.y,64,64, this.dimensions.width, 0, "right");
+                    punchObject = new PlayerPunch("punch", this.position.x+this.dimensions.width-32, this.position.y,64,64, this.dimensions.width, 0, "right","images/punch_right.png");
                     gameManager.addGameObject(punchObject);
 
                     setTimeout(() => {
@@ -112,7 +183,7 @@ class PlayerFigure extends ImageObject {
 
                     break;
                 case "up":
-                    punchObject = new PlayerPunch("punch", this.position.x, this.position.y-this.dimensions.height+32,64,64, 0, -this.dimensions.height, "up");
+                    punchObject = new PlayerPunch("punch", this.position.x, this.position.y-this.dimensions.height+32,64,64, 0, -this.dimensions.height, "up", "images/punch_up.png");
                     gameManager.addGameObject(punchObject);
 
                     setTimeout(() => {
@@ -121,7 +192,7 @@ class PlayerFigure extends ImageObject {
                     break;
 
                 case "down":
-                    punchObject = new PlayerPunch("punch", this.position.x, this.position.y+this.dimensions.height-32,64,64, 0, +this.dimensions.height, "down");
+                    punchObject = new PlayerPunch("punch", this.position.x, this.position.y+this.dimensions.height-32,64,64, 0, +this.dimensions.height, "down","images/punch_down.png");
                     gameManager.addGameObject(punchObject);
 
                     setTimeout(() => {
@@ -145,7 +216,7 @@ class PlayerFigure extends ImageObject {
                 gameManager.canvas.drawLayer.beginPath();
                 gameManager.canvas.drawLayer.fillStyle = "white";
                 gameManager.canvas.drawLayer.strokeStyle = "#000000";
-                gameManager.canvas.drawLayer.rect(this.position.x, this.position.y, this.dimensions.width, this.dimensions.height);
+                gameManager.canvas.drawLayer.rect(  this.boundaryOffsets.left+ this.position.x, this.position.y + this.boundaryOffsets.top, this.dimensions.width+this.boundaryOffsets.right-this.boundaryOffsets.left, this.dimensions.height+this.boundaryOffsets.bottom-this.boundaryOffsets.top);
                 gameManager.canvas.drawLayer.fill();
                 gameManager.canvas.drawLayer.stroke();
                 gameManager.canvas.drawLayer.closePath();
@@ -153,7 +224,7 @@ class PlayerFigure extends ImageObject {
                 gameManager.canvas.drawLayer.beginPath();
                 gameManager.canvas.drawLayer.fillStyle = "red";
                 gameManager.canvas.drawLayer.strokeStyle = "#000000";
-                gameManager.canvas.drawLayer.rect(this.position.x, this.position.y, this.dimensions.width, this.dimensions.height);
+                gameManager.canvas.drawLayer.rect(  this.boundaryOffsets.left+ this.position.x, this.position.y + this.boundaryOffsets.top, this.dimensions.width+this.boundaryOffsets.right-this.boundaryOffsets.left, this.dimensions.height+this.boundaryOffsets.bottom-this.boundaryOffsets.top);
                 gameManager.canvas.drawLayer.fill();
                 gameManager.canvas.drawLayer.stroke();
                 gameManager.canvas.drawLayer.closePath();
@@ -166,7 +237,7 @@ class PlayerFigure extends ImageObject {
         if(this.bombCooldown && this.bombNumber > 0){
 
             this.bombCooldown = false;
-            let bomb = new Bomb("bomb", this.position.x, this.position.y,64,64);
+            let bomb = new Bomb("bomb", this.position.x+16, this.position.y+32,32,32);
             gameManager.currentRoom.addEntity(bomb);
             gameManager.addGameObject(bomb);
             this.bombNumber--;
@@ -181,6 +252,12 @@ class PlayerFigure extends ImageObject {
     onCollision(otherObject) {
         if(otherObject.name == "enemy" || otherObject.name == "bullet" ){
             if(!this.invincible){
+                if(gameManager.playSound){
+
+                    let pickUpSound = new Audio("Sounds/Bluezone_BC0272_creature_attack_whoosh_impact_003.wav");
+                    pickUpSound.volume = 0.3;
+                    pickUpSound.play();
+                }
                 this.health -= otherObject.damage;
                 this.invincible = true;
             }

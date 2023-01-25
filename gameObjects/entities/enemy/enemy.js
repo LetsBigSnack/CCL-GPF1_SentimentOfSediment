@@ -1,4 +1,4 @@
-class Enemy extends GameObject {
+class Enemy extends ImageObject {
 
     moveBy = {
         "x": 1,
@@ -15,9 +15,11 @@ class Enemy extends GameObject {
     knockbackFrameCountdown = 3;
     knocbackCooldown = true;
 
+    canPlaySound = true;
 
-    constructor(name, x, y, width, height) {
-        super(name, x, y, width, height);
+
+    constructor(name, x, y, width, height, src) {
+        super(name, x, y, width, height,src);
         console.log("Enemy has been created");
         this.mass = 2;
     }
@@ -25,7 +27,12 @@ class Enemy extends GameObject {
     update() {
         if(gameManager.framesInRoom >= gameManager.catchUpFrames){
             if(this.health <= 0){
-
+                if(gameManager.playSound){
+                   let deathSound = new Audio("Sounds/Hit Rock Debris_RBD 02.wav");
+                    deathSound.volume = 0.2;
+                    deathSound.play();
+                    console.log("ddassdada");
+                }
                 this.isActive = false;
                 this.spawnItem();
             }
@@ -66,21 +73,12 @@ class Enemy extends GameObject {
         }
     }
 
-    draw() {
-        gameManager.canvas.drawLayer.beginPath();
-        gameManager.canvas.drawLayer.fillStyle = "blue";
-        gameManager.canvas.drawLayer.strokeStyle = "#000000";
-        gameManager.canvas.drawLayer.rect(this.position.x, this.position.y, this.dimensions.width, this.dimensions.height);
-        gameManager.canvas.drawLayer.fill();
-        gameManager.canvas.drawLayer.stroke();
-        gameManager.canvas.drawLayer.closePath();
-    }
 
     onCollision(otherObject) {
-        console.log("sadas");
-        if(otherObject.name == "obstacle") {
-            this.moveBy.x *= -1;
-            this.moveBy.y *= -1;
+        if(otherObject.name instanceof Obstacle) {
+            this.moveBy.y = 0;
+            this.moveBy.x = 0;
+            this.restorePosition();
 
         }
         if(otherObject.name == "player" || otherObject.name == "enemy"){
@@ -91,6 +89,26 @@ class Enemy extends GameObject {
             }
         }
         if(otherObject.name == "punch") {
+
+            if(gameManager.playSound && this.canPlaySound){
+
+                let rng = Math.random();
+                let punchSound
+                if(rng < 0.5){
+                     punchSound = new Audio("Sounds/boulder_impact_on_stones_14.wav");
+
+                }else{
+                     punchSound = new Audio("Sounds/punch_heavy_huge_distorted_01.wav");
+                }
+
+                punchSound.volume = 0.2;
+                punchSound.play();
+
+                this.canPlaySound = false;
+                setTimeout(() => {this.canPlaySound =true;},1000);
+
+            }
+
             this.health -= skeleton.punchDamage;
             this.knockbackDirection = otherObject.direction;
             this.knockback = true;
@@ -128,13 +146,13 @@ class Enemy extends GameObject {
     spawnItem(){
 
         let rngItems = [
-            new BombItem("bombItem", this.position.x, this.position.y, this.dimensions.width, this.dimensions.height),
-            new HealItem("healItem", this.position.x, this.position.y, this.dimensions.width, this.dimensions.height),
+            new BombItem("bombItem", this.position.x-8, this.position.y-8, 32, 32),
+            new HealItem("healItem", this.position.x-8, this.position.y-8, 32, 32),
         ]
 
         for(let i = 0; i < skeleton.luck; i++){
             let rng = Math.random();
-            if(rng < 0.15){
+            if(rng > 0){
                 let item = rngItems[Math.floor(Math.random()*rngItems.length)];
                 //TODO implement add Entity --> addGameObject
                 gameManager.currentRoom.addEntity(item);

@@ -1,6 +1,7 @@
 class Ruby extends PickUp{
 
     effectOnPickUp(player){
+        super.effectOnPickUp();
         gameManager.addGameObject(new InfoBanner("Ruby", "Shiny all around"));
         player.addHealth(5);
         player.subPunchCooldown(10);

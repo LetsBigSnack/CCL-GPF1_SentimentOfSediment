@@ -1,4 +1,4 @@
-class Door extends ImageObject {
+class Door extends Obstacle {
 
     opend = false;
 

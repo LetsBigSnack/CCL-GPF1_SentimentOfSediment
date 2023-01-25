@@ -1,5 +1,5 @@
 
-class Bomb extends GameObject {
+class Bomb extends ImageObject {
 
 
     moveBy = {
@@ -22,9 +22,19 @@ class Bomb extends GameObject {
     bounceFrames = 0;
     bouncesMaxFrames = 10;
 
-    constructor(name, x, y, width, height) {
-        super(name, x, y, width, height);
+    constructor(name, x, y, width, height, src = "images/dynamite_sheet.png" ) {
+        super(name, x, y, width, height,src);
+        this.animationDurationPerFrame = 10;
+        this.addAnimationInformation("burningDown", 0,6);
+        this.addAnimationInformation("blinking", 6,7);
+        this.addAnimationInformation("flash", 7,7);
+        this.setCurrentAnimationByName("burningDown");
 
+        if(gameManager.playSound){
+            let bombSound = new Audio("Sounds/Party-Pack_Match_Ignite_02-03.wav");
+            bombSound.volume = 0.3;
+            bombSound.play();
+        }
     }
 
     update() {
@@ -50,18 +60,10 @@ class Bomb extends GameObject {
 
 
         if(this.currentFrameCount === this.frameUntilExplode){
-            this.dimensions.width *= 3;
-            this.dimensions.height *= 3;
-
-            this.position.x -= this.dimensions.width/4;
-            this.position.y -= this.dimensions.height/4;
 
             this.explode = true;
-            setTimeout(() => {
-                this.isActive = false;
-            }, "200")
+
         }
-        console.log(this.moveBy.x, this.moveBy.y);
         this.position.x += this.moveBy.x;
         this.position.y += this.moveBy.y;
 
@@ -70,33 +72,26 @@ class Bomb extends GameObject {
 
 
     draw() {
-
-        if(this.explode){
-            gameManager.canvas.drawLayer.beginPath();
-            gameManager.canvas.drawLayer.fillStyle = "orange";
-            gameManager.canvas.drawLayer.strokeStyle = "#000000";
-            gameManager.canvas.drawLayer.rect(this.position.x, this.position.y, this.dimensions.width, this.dimensions.height);
-            gameManager.canvas.drawLayer.fill();
-            gameManager.canvas.drawLayer.stroke();
-            gameManager.canvas.drawLayer.closePath();
-
-        }else if(this.currentFrameCount % 15 === 0){
-            gameManager.canvas.drawLayer.beginPath();
-            gameManager.canvas.drawLayer.fillStyle = "white";
-            gameManager.canvas.drawLayer.strokeStyle = "#000000";
-            gameManager.canvas.drawLayer.rect(this.position.x, this.position.y, this.dimensions.width, this.dimensions.height);
-            gameManager.canvas.drawLayer.fill();
-            gameManager.canvas.drawLayer.stroke();
-            gameManager.canvas.drawLayer.closePath();
-        }else{
-            gameManager.canvas.drawLayer.beginPath();
-            gameManager.canvas.drawLayer.fillStyle = "red";
-            gameManager.canvas.drawLayer.strokeStyle = "#000000";
-            gameManager.canvas.drawLayer.rect(this.position.x, this.position.y, this.dimensions.width, this.dimensions.height);
-            gameManager.canvas.drawLayer.fill();
-            gameManager.canvas.drawLayer.stroke();
-            gameManager.canvas.drawLayer.closePath();
+        console.log(this.currentFrameCount);
+        super.draw();
+        if(this.currentAnimationFrame === 5){
+            this.setCurrentAnimationByName("blinking");
         }
+        if(this.currentAnimationFrame > 5){
+            if(this.explode){
+                this.isActive = false;
+                this.dimensions.width *= 4;
+                this.dimensions.height *= 4;
+
+                this.position.x -= this.dimensions.width/4+8;
+                this.position.y -= this.dimensions.height/4+8;
+
+                gameManager.addGameObject(new BombExplosion("bomb",this.position.x, this.position.y,this.dimensions.width,this.dimensions.height ));
+
+
+            }
+        }
+
 
     }
 
