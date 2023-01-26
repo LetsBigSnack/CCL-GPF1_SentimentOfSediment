@@ -6,7 +6,7 @@ class Bullet extends Enemy {
     };
 
     speed = 5;
-    damage = 10;
+    damage = 4;
 
 
     constructor(name, x, y, width, height, moveByX, moveByY) {

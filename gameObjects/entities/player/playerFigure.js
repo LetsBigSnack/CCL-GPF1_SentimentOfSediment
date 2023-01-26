@@ -34,24 +34,28 @@ class PlayerFigure extends ImageObject {
 
     maxInvincibilityFrameCooldown = 60;
 
+
+
     static playerStates = {
-        Idle_Front: "idel_front",
-        Idle_Left: "idel_front",
-        Idle_Right: "idel_front",
-        Idle_Bottom: "idel_front",
-        Run_Front: "idel_front",
-        Run_Left: "idel_front",
-        Run_Right: "idel_front",
-        Run_Bottom: "idel_front",
-        Punch_Front: "idel_front",
-        Punch_Left: "idel_front",
-        Punch_Right: "idel_front",
-        Punch_Bottom: "idel_front",
+        Idle_Front: "Idle_Front",
+        Idle_Left: "Idle_Left",
+        Idle_Right: "Idle_Right",
+        Idle_Bottom: "Idle_Bottom",
+        Run_Front: "Run_Front",
+        Run_Left: "Run_Left",
+        Run_Right: "Run_Right",
+        Run_Bottom: "Run_Bottom",
+        Punch_Front: "Punch_Front",
+        Punch_Left: "Punch_Left",
+        Punch_Right: "Punch_Right",
+        Punch_Bottom: "Punch_Bottom",
     };
 
+    isPunching = false;
     currentState = PlayerFigure.playerStates.Idle_Front;
 
-
+    animationResetFrameCooldown = 120;
+    currentAnimationReset  =0;
     constructor(name, x, y, width, height, src) {
         super(name, x, y, width, height, src);
         console.log("PlayerFigure has been created");
@@ -60,7 +64,7 @@ class PlayerFigure extends ImageObject {
     }
 
     update() {
-
+        this.currentAnimationReset++;
         if(this.health <= 0){
             this.health = 0;
             this.isActive = false;
@@ -77,56 +81,132 @@ class PlayerFigure extends ImageObject {
         this.position.x = Math.round(this.position.x);
         this.position.y = Math.round(this.position.y);
         if(this.punch){
-            this.spawnPunch(this.punch);
+            switch (this.currentState){
+                case PlayerFigure.playerStates.Punch_Front:
+                    if(this.currentAnimationFrame === 15){
+                        console.log("punch");
+                        this.spawnPunch(this.punch);
+                    }
+                    break;
+                case PlayerFigure.playerStates.Punch_Left:
+                    if(this.currentAnimationFrame === 64){
+                        console.log("punch");
+                        this.spawnPunch(this.punch);
+                    }
+                    break;
+                case PlayerFigure.playerStates.Punch_Right:
+                    if(this.currentAnimationFrame === 34){
+                        console.log("punch");
+                        this.spawnPunch(this.punch);
+                    }
+                    break;
+                case PlayerFigure.playerStates.Punch_Bottom:
+
+                    if(this.currentAnimationFrame === 48){
+                        console.log("punch");
+                        this.spawnPunch(this.punch);
+                    }
+                    break;
+            }
+
         }
         if(this.bomb){
             this.spawnBomb();
 
         }
         this.checkWorldPostion();
+
+
+        let isKeyPressed = false;
+
+        for (const [key, value] of Object.entries(pressedKeys)) {
+            if (value){
+                isKeyPressed = true;
+            }
+        }
+
+        if(!isKeyPressed) {
+            if(this.currentState.includes("Idle")){
+                this.switchState("Idle_Back");
+            }
+
+        }
+
+        /**
+         if(this.currentAnimationReset >= this.animationResetFrameCooldown){
+            console.log("test");
+            let isKeyPressed = false;
+
+            for (const [key, value] of Object.entries(pressedKeys)) {
+                if (value){
+                    isKeyPressed = true;
+                }
+            }
+
+            if(!isKeyPressed) {
+                this.switchState(PlayerFigure.playerStates.Idle_Bottom);
+            }
+            this.currentAnimationReset = 0;
+        }
+         */
     }
 
     switchState(stateName){
-        if(stateName !== this.currentState){
+        console.log(stateName);
+        if(stateName !== this.currentState && !this.isPunching){
+
             this.currentState = stateName;
 
             switch (stateName){
 
                 case PlayerFigure.playerStates.Idle_Front:
-
+                    this.setCurrentAnimationByName("idle_up");
                     break;
                 case PlayerFigure.playerStates.Idle_Left:
-
+                    this.setCurrentAnimationByName("idle_left");
                     break;
                 case PlayerFigure.playerStates.Idle_Right:
-
+                    this.setCurrentAnimationByName("idle_right");
                     break;
                 case PlayerFigure.playerStates.Idle_Bottom:
-
+                    this.setCurrentAnimationByName("idle_down");
                     break;
                 case PlayerFigure.playerStates.Run_Front:
-
+                    this.setCurrentAnimationByName("walk_up");
                     break;
                 case PlayerFigure.playerStates.Run_Left:
-
+                    skeleton.setCurrentAnimationByName("walk_left");
                     break;
                 case PlayerFigure.playerStates.Run_Right:
-
+                    skeleton.setCurrentAnimationByName("walk_right");
                     break;
                 case PlayerFigure.playerStates.Run_Bottom:
-
+                    skeleton.setCurrentAnimationByName("walk_down");
                     break;
                 case PlayerFigure.playerStates.Punch_Front:
+                    if(this.punchCooldown) {
+                        skeleton.setCurrentAnimationByName("punch_front");
+                        this.isPunching = true;
+                    }
 
                     break;
                 case PlayerFigure.playerStates.Punch_Left:
-
+                    if(this.punchCooldown) {
+                        skeleton.setCurrentAnimationByName("punch_left");
+                        this.isPunching = true;
+                    }
                     break;
                 case PlayerFigure.playerStates.Punch_Right:
-
+                    if(this.punchCooldown) {
+                        skeleton.setCurrentAnimationByName("punch_right");
+                        this.isPunching = true;
+                    }
                     break;
                 case PlayerFigure.playerStates.Punch_Bottom:
-
+                    if(this.punchCooldown) {
+                        skeleton.setCurrentAnimationByName("punch_bottom");
+                        this.isPunching = true;
+                    }
                     break;
             }
         }
@@ -162,7 +242,22 @@ class PlayerFigure extends ImageObject {
     spawnPunch(punch){
         if(this.punchCooldown){
             this.punchCooldown = false;
-            let punchObject
+            this.isPunching = false;
+
+            this.switchState(PlayerFigure.playerStates.Idle_Bottom);
+            if(pressedKeys["w"]){
+                this.switchState(PlayerFigure.playerStates.Run_Front);
+            }if(pressedKeys["a"]){
+                this.switchState(PlayerFigure.playerStates.Run_Left);
+            }
+            if(pressedKeys["s"]){
+                this.switchState(PlayerFigure.playerStates.Run_Bottom);
+            }
+            if(pressedKeys["d"]){
+                this.switchState(PlayerFigure.playerStates.Run_Right);
+            }
+
+            let punchObject;
             switch (punch){
                 case "left":
                     punchObject = new PlayerPunch("punch", this.position.x-32, this.position.y,64,64, -64, 0, "left" ,"images/punch_left.png");
@@ -204,9 +299,12 @@ class PlayerFigure extends ImageObject {
             }
             setTimeout(() => {
                 this.punchCooldown = true;
+                this.currentState = PlayerFigure.playerStates.Idle_Bottom;
             }, this.punchCooldownTimer);
         }
         this.punch = "";
+
+
     }
 
     draw() {

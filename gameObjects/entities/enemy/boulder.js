@@ -30,7 +30,7 @@ class Boulder extends Enemy {
     update() {
         if(gameManager.framesInRoom >= gameManager.catchUpFrames){
             if(this.health <= 0){
-
+                gameManager.won();
                 this.isActive = false;
                 //this.spawnItem();
             }

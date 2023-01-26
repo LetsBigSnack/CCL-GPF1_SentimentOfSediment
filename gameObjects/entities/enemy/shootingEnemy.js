@@ -1,6 +1,6 @@
 class ShootingEnemy extends Enemy {
 
-    shootCooldownFrames = 45;
+    shootCooldownFrames = 60;
     shootCurrentFrame  = 0;
 
     shootingRange = 250;

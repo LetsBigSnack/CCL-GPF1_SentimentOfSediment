@@ -183,7 +183,7 @@ class Room{
 
                             if(this.type === Room.roomTypes.Boss){
                                 if(!bossSpawned){
-                                    this.roomTiles[y][x] = new Boulder("enemy", x * this.tileDimensions.x , y * this.tileDimensions.y, this.tileDimensions.x*2, this.tileDimensions.y*2 ,"images/enemies/boss-Sheet.png")
+                                    this.roomTiles[y][x] = new Boulder("enemy", 352, 224, this.tileDimensions.x*2, this.tileDimensions.y*2 ,"images/enemies/boss-Sheet.png")
                                     this.roomTiles[y][x].addAnimationInformation("idle", 0, 11);
                                     this.roomTiles[y][x].addAnimationInformation("chargeUp_1", 12, 15);
                                     this.roomTiles[y][x].addAnimationInformation("chargeUp_2", 18, 21);

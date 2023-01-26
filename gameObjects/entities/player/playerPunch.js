@@ -17,6 +17,8 @@ class PlayerPunch extends ImageObject {
     update() {
         this.position.x = skeleton.position.x + this.offSetX;
         this.position.y = skeleton.position.y + this.offSetY;
+        this.position.x = Math.round(this.position.x);
+        this.position.y = Math.round(this.position.y);
     }
 
     draw() {

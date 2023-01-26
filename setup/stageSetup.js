@@ -40,6 +40,13 @@ skeleton.addAnimationInformation("idle_up", 38, 38);
 skeleton.addAnimationInformation("idle_left", 50, 50);
 skeleton.addAnimationInformation("idle_right", 20, 20);
 skeleton.addAnimationInformation("idle_down", 7, 7);
+
+
+skeleton.addAnimationInformation("punch_front", 11, 19);
+skeleton.addAnimationInformation("punch_left", 58, 67);
+skeleton.addAnimationInformation("punch_right", 28, 37);
+skeleton.addAnimationInformation("punch_bottom", 43, 49);
+
 let miniMap = new MiniMap("mini",canvas.canvasBoundaries.right-130,5,125,125);
 let playerUI = new PlayerNumbers("playerNumbers",canvas.canvasBoundaries.left+20,50,140,70);
 let playerStats = new PlayerStats("playerStats",canvas.canvasBoundaries.left+20,canvas.canvasBoundaries.bottom-150,100,100);

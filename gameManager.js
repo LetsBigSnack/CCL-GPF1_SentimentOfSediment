@@ -10,7 +10,8 @@ class GameManager {
 		MainMenu : 0,
 		Playing : 1,
 		Pausing : 2,
-		Dead: 3
+		Dead: 3,
+		Won: 4
 	}
 
 	static gameStates = {
@@ -122,6 +123,8 @@ class GameManager {
 			let currentFps = Math.round(1000 / (sinceStart / ++gameManager.framecount) * 100) / 100;
 			document.querySelector("#fps").innerHTML = currentFps;
 			canvas.clearScreen();
+			//
+
 			switch(gameManager.currentState){
 				case GameManager.states.MainMenu:
 					gameManager.displayMenu();
@@ -135,6 +138,9 @@ class GameManager {
 				case GameManager.states.Dead:
 					gameManager.gameOverHandling();
 					break;
+				case GameManager.states.Won:
+					gameManager.wonHandling();
+					break;
 
 			}
 
@@ -145,6 +151,7 @@ class GameManager {
 	}
 
 	displayMenu(){
+
 		gameManager.removeGarbage();
 		if(gameManager.currentRoom){
 			gameManager.currentRoom.removeGarbage();
@@ -443,6 +450,42 @@ class GameManager {
 		}
 	}
 
+
+	wonHandling(){
+		gameManager.removeGarbage();
+		gameManager.currentRoom.removeGarbage();
+
+		for (let gameLoopState = 0; gameLoopState < Object.keys(GameManager.pauseStates).length; gameLoopState++) {
+			//console.log(gameManager.framesInRoom)
+			gameManager.gameObjects.forEach((gameObject) => {
+				if (gameObject.isActive) {
+					switch (gameLoopState) {
+
+						case GameManager.pauseStates.mouseEvents:
+							if(gameManager.stopCurrentLoop){
+								break;
+							}
+							mouseHelper.checkObjectMouseEvent(gameObject);
+							break;
+						case GameManager.pauseStates.draw:
+							if(gameManager.stopCurrentLoop){
+								break;
+							}
+							//gameObject.rotate();
+							gameObject.draw();
+							gameObject.debugDraw();
+							//gameObject.restoreCanvas();
+							break;
+					}
+				}
+			});
+			mouseHelper.recentMouseEvent = 0;
+			if(gameLoopState === GameManager.pauseStates.draw){
+				gameManager.stopCurrentLoop = false;
+			}
+		}
+	}
+
 	togglePause(){
 		if(gameManager.currentState === GameManager.states.Pausing){
 			gameManager.currentState = GameManager.states.Playing;
@@ -459,14 +502,23 @@ class GameManager {
 		new GameOverMenu("gameOver",gameManager.canvas.canvasBoundaries.right/2-150, gameManager.canvas.canvasBoundaries.bottom/2-200, 300,400, "images/menu_game_over.png");
 	}
 
+	won(){
+		gameManager.currentState = GameManager.states.Won;
+		new GameOverMenu("win",gameManager.canvas.canvasBoundaries.right/2-150, gameManager.canvas.canvasBoundaries.bottom/2-200, 300,400, "images/menu_win.png");
+
+	}
+
 	restartGame(){
 		gameManager.rooms = LevelGenerator.generateLevel();
+		gameManager.playSound = false;
+		gameManager.playMusic = false;
 		gameManager.currentRoom = gameManager.rooms.filter(room => room.x_pos === 0 &&  room.y_pos === 0)[0];
 		gameManager.currentRoom.setUpWalls();
 		gameManager.currentRoom.addEntity(miniMap);
 		gameManager.currentRoom.addEntity(playerUI);
 		gameManager.currentRoom.addEntity(playerStats);
 		gameManager.currentRoom.visited = true;
+		skeleton.setCurrentAnimationByName("idle_down");
 		gameManager.framesInRoom = 0;
 		skeleton.resetPlayer();
 		gameManager.setUpRoom();

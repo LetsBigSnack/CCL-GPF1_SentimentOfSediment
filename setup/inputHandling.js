@@ -7,53 +7,58 @@ function keyDown(eventInformation) {
 	switch (eventInformation.key) {
 		case "w":
 			skeleton.moveBy.top = -skeleton.moveVelocity;
-			skeleton.setCurrentAnimationByName("walk_up");
+			skeleton.switchState(PlayerFigure.playerStates.Run_Front);
 			break;
 		case "a":
 			skeleton.moveBy.left = -skeleton.moveVelocity;
-			skeleton.setCurrentAnimationByName("walk_left");
+			skeleton.switchState(PlayerFigure.playerStates.Run_Left);
+
 			break;
 		case "d":
 			skeleton.moveBy.left = skeleton.moveVelocity;
-			skeleton.setCurrentAnimationByName("walk_right");
+			skeleton.switchState(PlayerFigure.playerStates.Run_Right);
+
 			break;
 		case "s":
 			skeleton.moveBy.top = skeleton.moveVelocity;
-			skeleton.setCurrentAnimationByName("walk_down");
+			skeleton.switchState(PlayerFigure.playerStates.Run_Bottom);
+
 			//move down
 			break;
 		case "ArrowLeft":
 			// Left pressed
 			console.log("PlayerPunch Left");
+			skeleton.switchState(PlayerFigure.playerStates.Punch_Left);
 			skeleton.punch = "left";
 			break;
 		case "ArrowRight":
 			// Right pressed
 			console.log("PlayerPunch Right");
+			skeleton.switchState(PlayerFigure.playerStates.Punch_Right);
 			skeleton.punch = "right";
 			break;
 		case "ArrowUp":
 			// Up pressed
 			console.log("PlayerPunch Up");
+			skeleton.switchState(PlayerFigure.playerStates.Punch_Bottom);
 			skeleton.punch = "up";
 			break;
 		case "ArrowDown":
 			// Down pressed
 			console.log("PlayerPunch Down");
+			skeleton.switchState(PlayerFigure.playerStates.Punch_Front);
 			skeleton.punch = "down";
 			break;
 		case "e":
-			// Down pressed
-			console.log("PlayerPunch Down");
+
 			skeleton.bomb = true;
 			break;
 		case "Escape":
 			gameManager.togglePause();
 			break;
 		case "o":
-			// Down pressed
-			console.log("play");
-			gameManager.currentState = GameManager.states.Playing;
+			// Toggle Debug Mode
+			//gameManager.currentState = GameManager.states.Playing;
 			break;
 	}
 }
@@ -68,19 +73,19 @@ function keyUp(eventInformation) {
 
 	if(pressedKeys["w"]){
 		skeleton.moveBy.top = -skeleton.moveVelocity;
-		skeleton.setCurrentAnimationByName("walk_up");
+		skeleton.switchState(PlayerFigure.playerStates.Run_Front);
 	}
 	if(pressedKeys["a"]){
 		skeleton.moveBy.left = -skeleton.moveVelocity;
-		skeleton.setCurrentAnimationByName("walk_left");
+		skeleton.switchState(PlayerFigure.playerStates.Run_Left);
 	}
 	if(pressedKeys["s"]){
 		skeleton.moveBy.top = skeleton.moveVelocity;
-		skeleton.setCurrentAnimationByName("walk_down");
+		skeleton.switchState(PlayerFigure.playerStates.Run_Bottom);
 	}
 	if(pressedKeys["d"]){
 		skeleton.moveBy.left = skeleton.moveVelocity;
-		skeleton.setCurrentAnimationByName("walk_right");
+		skeleton.switchState(PlayerFigure.playerStates.Run_Right);
 	}
 
 
@@ -96,19 +101,18 @@ function keyUp(eventInformation) {
 	if(!isKeyPressed){
 		switch (eventInformation.key) {
 			case "w":
-                skeleton.setCurrentAnimationByName("idle_up");
+				skeleton.switchState(PlayerFigure.playerStates.Idle_Front);
 				break;
 			case "a":
-				skeleton.setCurrentAnimationByName("idle_left");
+				skeleton.switchState(PlayerFigure.playerStates.Idle_Left);
 				break;
 			case "d":
-				skeleton.setCurrentAnimationByName("idle_right");
+				skeleton.switchState(PlayerFigure.playerStates.Idle_Right);
 				break;
 			case "s":
-                skeleton.setCurrentAnimationByName("idle_down");
+				skeleton.switchState(PlayerFigure.playerStates.Idle_Bottom);
 				break;
 	}
-
 	}
 }
 window.addEventListener("keyup", keyUp);
