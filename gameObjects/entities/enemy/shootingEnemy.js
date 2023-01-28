@@ -6,6 +6,7 @@ class ShootingEnemy extends Enemy {
     shootingRange = 250;
 
     speed = 2;
+    mass = 10;
 
     update() {
         if(gameManager.framesInRoom >= gameManager.catchUpFrames){

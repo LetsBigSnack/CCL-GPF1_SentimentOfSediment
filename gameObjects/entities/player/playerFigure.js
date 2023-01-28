@@ -421,10 +421,10 @@ class PlayerFigure extends ImageObject {
         this. health = 100;
 
         this.luck = 1;
-
+        this.punch = "";
         this.bomb = false;
         this.bombNumber = 1;
-
+        this.isPunching = false;
         this.punch = "";
         this.punchCooldown = true;
         this.punchCooldownTimer = 1000;

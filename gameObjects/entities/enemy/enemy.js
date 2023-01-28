@@ -21,7 +21,7 @@ class Enemy extends ImageObject {
     constructor(name, x, y, width, height, src) {
         super(name, x, y, width, height,src);
         console.log("Enemy has been created");
-        this.mass = 2;
+        this.mass = 5;
     }
 
     update() {
@@ -128,7 +128,7 @@ class Enemy extends ImageObject {
                         this.moveBy.y  -=  10/this.mass;
                         break;
                     case "down":
-                        this.moveBy.y +=  10;
+                        this.moveBy.y +=  10/this.mass;
                         break;
                 }
                 this.knockbackCurrentFrame++;
@@ -152,7 +152,7 @@ class Enemy extends ImageObject {
 
         for(let i = 0; i < skeleton.luck; i++){
             let rng = Math.random();
-            if(rng > 0){
+            if(rng > 0.4){
                 let item = rngItems[Math.floor(Math.random()*rngItems.length)];
                 //TODO implement add Entity --> addGameObject
                 gameManager.currentRoom.addEntity(item);
