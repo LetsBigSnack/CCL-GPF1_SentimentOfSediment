@@ -366,7 +366,7 @@ class GameManager {
 
 	setUpRoom(){
 		gameManager.clearGameObjects();
-		gameManager.currentRoom.addEntity(skeleton);
+		gameManager.currentRoom.addEntity(playerFigure);
 		gameManager.currentRoom.addEntityToObject(this);
 	}
 
@@ -510,21 +510,17 @@ class GameManager {
 
 	restartGame(){
 		gameManager.rooms = LevelGenerator.generateLevel();
-		gameManager.playSound = false;
-		gameManager.playMusic = false;
 		gameManager.currentRoom = gameManager.rooms.filter(room => room.x_pos === 0 &&  room.y_pos === 0)[0];
 		gameManager.currentRoom.setUpWalls();
 		gameManager.currentRoom.addEntity(miniMap);
 		gameManager.currentRoom.addEntity(playerUI);
 		gameManager.currentRoom.addEntity(playerStats);
 		gameManager.currentRoom.visited = true;
-		skeleton.setCurrentAnimationByName("idle_down");
+		playerFigure.setCurrentAnimationByName("idle_down");
 		gameManager.framesInRoom = 0;
-		skeleton.resetPlayer();
+		playerFigure.resetPlayer();
 		gameManager.setUpRoom();
 		gameManager.currentState = GameManager.states.Playing;
-
-
 	}
 
 	toggleMusic(){
@@ -535,6 +531,16 @@ class GameManager {
 
 	toggleSound(){
 		gameManager.playSound = !gameManager.playSound;
+		changedSound = true;
+	}
+
+	stopMusic(){
+		gameManager.playMusic = false;
+		changedSound = true;
+	}
+
+	stopSound(){
+		gameManager.playSound = false;
 		changedSound = true;
 	}
 

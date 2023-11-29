@@ -34,7 +34,7 @@ class PlayerNumbers extends GameObject {
         gameManager.canvas.drawLayer.beginPath();
         gameManager.canvas.drawLayer.fillStyle = "red";
         gameManager.canvas.drawLayer.strokeStyle = "#000000";
-        gameManager.canvas.drawLayer.rect(this.position.x , this.position.y, this.dimensions.width * (skeleton.health / skeleton.maxHealth), this.dimensions.height* 0.30);
+        gameManager.canvas.drawLayer.rect(this.position.x , this.position.y, this.dimensions.width * (playerFigure.health / playerFigure.maxHealth), this.dimensions.height* 0.30);
         gameManager.canvas.drawLayer.fill();
         gameManager.canvas.drawLayer.stroke();
         gameManager.canvas.drawLayer.closePath();
@@ -54,7 +54,7 @@ class PlayerNumbers extends GameObject {
         gameManager.canvas.drawLayer.fillStyle = "white";
         gameManager.canvas.drawLayer.strokeStyle = "#000000";
         gameManager.canvas.drawLayer.font = this.dimensions.height* 0.30+"px Pixel";
-        gameManager.canvas.drawLayer.fillText(skeleton.bombNumber,this.position.x+(this.dimensions.width / 7)*1.2, this.position.y + (this.dimensions.height* 0.30*2.85));
+        gameManager.canvas.drawLayer.fillText(playerFigure.bombNumber,this.position.x+(this.dimensions.width / 7)*1.2, this.position.y + (this.dimensions.height* 0.30*2.85));
         gameManager.canvas.drawLayer.fill();
         gameManager.canvas.drawLayer.stroke();
         gameManager.canvas.drawLayer.closePath();

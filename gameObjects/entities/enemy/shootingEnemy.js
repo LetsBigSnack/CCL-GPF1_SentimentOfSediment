@@ -38,8 +38,8 @@ class ShootingEnemy extends Enemy {
 
     behaviour(){
 
-        let divX = skeleton.position.x - this.position.x;
-        let divY = skeleton.position.y - this.position.y;
+        let divX = playerFigure.position.x - this.position.x;
+        let divY = playerFigure.position.y - this.position.y;
 
         let hypotenuse = Math.sqrt(Math.abs(divX)**2 + Math.abs(divY)**2);
 

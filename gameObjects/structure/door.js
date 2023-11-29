@@ -58,23 +58,23 @@ class Door extends Obstacle {
                     gameManager.currentRoom.visited = true;
                     switch (this.name){
                         case "n":
-                            skeleton.position.y = 444-64;
+                            playerFigure.position.y = 444-64;
                             break;
                         case "e":
-                            skeleton.position.x = 70;
+                            playerFigure.position.x = 70;
                             break;
                         case "s":
-                            skeleton.position.y = 70;
+                            playerFigure.position.y = 70;
                             break;
                         case "w":
                             console.log("dsad");
-                            skeleton.position.x = 640;
+                            playerFigure.position.x = 640;
                             break;
                     }
 
                     if(!gameManager.currentRoom.alreadyFilled){
                         gameManager.currentRoom.setUpWalls();
-                        gameManager.currentRoom.addEntity(skeleton);
+                        gameManager.currentRoom.addEntity(playerFigure);
                         gameManager.currentRoom.addEntity(miniMap);
                         gameManager.currentRoom.addEntity(playerUI);
                         gameManager.currentRoom.addEntity(playerStats);

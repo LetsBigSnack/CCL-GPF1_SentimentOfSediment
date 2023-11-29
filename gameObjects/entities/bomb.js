@@ -121,7 +121,7 @@ class Bomb extends ImageObject {
         }
 
         if(otherObject.name == "punch") {
-            this.health -= skeleton.punchDamage;
+            this.health -= playerFigure.punchDamage;
             this.knockbackDirection = otherObject.direction;
             this.knockback = true;
         }

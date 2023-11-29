@@ -175,36 +175,36 @@ class PlayerFigure extends ImageObject {
                     this.setCurrentAnimationByName("walk_up");
                     break;
                 case PlayerFigure.playerStates.Run_Left:
-                    skeleton.setCurrentAnimationByName("walk_left");
+                    playerFigure.setCurrentAnimationByName("walk_left");
                     break;
                 case PlayerFigure.playerStates.Run_Right:
-                    skeleton.setCurrentAnimationByName("walk_right");
+                    playerFigure.setCurrentAnimationByName("walk_right");
                     break;
                 case PlayerFigure.playerStates.Run_Bottom:
-                    skeleton.setCurrentAnimationByName("walk_down");
+                    playerFigure.setCurrentAnimationByName("walk_down");
                     break;
                 case PlayerFigure.playerStates.Punch_Front:
                     if(this.punchCooldown) {
-                        skeleton.setCurrentAnimationByName("punch_front");
+                        playerFigure.setCurrentAnimationByName("punch_front");
                         this.isPunching = true;
                     }
 
                     break;
                 case PlayerFigure.playerStates.Punch_Left:
                     if(this.punchCooldown) {
-                        skeleton.setCurrentAnimationByName("punch_left");
+                        playerFigure.setCurrentAnimationByName("punch_left");
                         this.isPunching = true;
                     }
                     break;
                 case PlayerFigure.playerStates.Punch_Right:
                     if(this.punchCooldown) {
-                        skeleton.setCurrentAnimationByName("punch_right");
+                        playerFigure.setCurrentAnimationByName("punch_right");
                         this.isPunching = true;
                     }
                     break;
                 case PlayerFigure.playerStates.Punch_Bottom:
                     if(this.punchCooldown) {
-                        skeleton.setCurrentAnimationByName("punch_bottom");
+                        playerFigure.setCurrentAnimationByName("punch_bottom");
                         this.isPunching = true;
                     }
                     break;

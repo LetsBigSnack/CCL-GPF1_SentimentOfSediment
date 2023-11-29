@@ -51,11 +51,11 @@ class PlayerStats extends GameObject {
 
     draw() {
         let playerStats = [
-            skeleton.moveVelocity,
-            skeleton.luck,
-            skeleton.punchDamage,
-            skeleton.punchCooldownTimer,
-            skeleton.punchDuration
+            playerFigure.moveVelocity,
+            playerFigure.luck,
+            playerFigure.punchDamage,
+            playerFigure.punchCooldownTimer,
+            playerFigure.punchDuration
         ];
 
 

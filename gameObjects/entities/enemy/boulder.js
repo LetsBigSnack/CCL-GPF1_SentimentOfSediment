@@ -72,17 +72,17 @@ class Boulder extends Enemy {
         let rng = Math.random();
 
         if(rng >= 0.5){
-            if(this.position.x < skeleton.prevPosition.x){
+            if(this.position.x < playerFigure.prevPosition.x){
                 this.moveBy.x = 1;
-            }else if(this.position.x > skeleton.prevPosition.x){
+            }else if(this.position.x > playerFigure.prevPosition.x){
                 this.moveBy.x = -1;
             }else{
                 this.moveBy.x = 0;
             }
 
-            if(this.position.y < skeleton.prevPosition.y){
+            if(this.position.y < playerFigure.prevPosition.y){
                 this.moveBy.y = 1;
-            }else if(this.position.y > skeleton.prevPosition.y){
+            }else if(this.position.y > playerFigure.prevPosition.y){
                 this.moveBy.y = -1;
             }else{
                 this.moveBy.y = 0;
@@ -173,7 +173,7 @@ class Boulder extends Enemy {
 
             }
 
-            this.health -= skeleton.punchDamage;
+            this.health -= playerFigure.punchDamage;
             this.knockbackDirection = otherObject.direction;
             this.knockback = true;
         }
@@ -228,8 +228,8 @@ class Boulder extends Enemy {
     slam(){
         if(this.currentStateFrame === 45){
             this.setCurrentAnimationByName("attack");
-            let divX = skeleton.position.x - this.position.x;
-            let divY = skeleton.position.y - this.position.y;
+            let divX = playerFigure.position.x - this.position.x;
+            let divY = playerFigure.position.y - this.position.y;
 
             let hypotenuse = Math.sqrt(Math.abs(divX)**2 + Math.abs(divY)**2);
 
@@ -244,8 +244,8 @@ class Boulder extends Enemy {
     bounce(){
         if(this.currentStateFrame === 45){
             this.setCurrentAnimationByName("attack");
-            let divX = skeleton.position.x - this.position.x;
-            let divY = skeleton.position.y - this.position.y;
+            let divX = playerFigure.position.x - this.position.x;
+            let divY = playerFigure.position.y - this.position.y;
 
             let hypotenuse = Math.sqrt(Math.abs(divX)**2 + Math.abs(divY)**2);
 
