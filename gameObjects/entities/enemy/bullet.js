@@ -10,7 +10,7 @@ class Bullet extends Enemy {
 
 
     constructor(name, x, y, width, height, moveByX, moveByY) {
-        super(name, x, y, width, height);
+        super(name, x, y, width, height, "");
         this.mass = 2;
         this.moveBy.x = moveByX;
         this.moveBy.y = moveByY;
